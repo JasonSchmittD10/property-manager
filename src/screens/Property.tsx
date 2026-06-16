@@ -1,242 +1,244 @@
+import { useState } from 'react'
+import { property, rent, quickInfo } from '../config/property'
+import { formatMoney, nextDueDateLabel } from '../lib/format'
 import {
-  property,
-  rent,
-  utilities,
-  documents,
-  houseManual,
-  trashRecycling,
-  landlord,
-  appAccess,
-} from '../config/property'
-import { Card } from '../components/Card'
-import { ContactRow } from '../components/ContactRow'
-import { formatMoney } from '../lib/format'
-import { FileText, Zap, Flame, Droplet, Wifi as WifiIcon, Trash2 } from 'lucide-react'
+  PowerIcon,
+  DocumentIcon,
+  BookBookmarkIcon,
+  HistoryIcon,
+  CaratDownIcon,
+} from '../components/icons/Icons'
+import { UtilitiesSheet } from '../components/UtilitiesSheet'
+import { DocumentsSheet } from '../components/DocumentsSheet'
+import { HouseManualSheet } from '../components/HouseManualSheet'
 
-const utilityIcon: Record<string, typeof Zap> = {
-  electric: Zap,
-  gas: Flame,
-  water: Droplet,
-  internet: WifiIcon,
-}
+type SheetKey = 'utilities' | 'documents' | 'manual' | null
 
 export default function Property() {
-  const totalRent = rent.baseRent + rent.internetCharge
+  const [openSheet, setOpenSheet] = useState<SheetKey>(null)
+  const [breakdownOpen, setBreakdownOpen] = useState(false)
+  const total = rent.baseRent + rent.internetCharge
 
   return (
-    <div className="px-4 space-y-6">
-      <header className="pt-2">
-        <h1 className="font-heading text-3xl">Property</h1>
-        <p className="text-muted text-sm">Everything about the house and your tenancy.</p>
+    <div className="px-6 pt-6 pb-8 space-y-7">
+      {/* Header */}
+      <header>
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+          Your home
+        </p>
+        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
+          {property.name}
+        </h1>
+        <p className="font-body font-medium text-[14px] text-warm-400 mt-1">
+          {property.address}, {property.cityStateZip}
+        </p>
       </header>
 
-      {/* Utilities */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Utilities</h2>
-        <div className="space-y-3">
-          {utilities.map((u) => {
-            const Icon = utilityIcon[u.id] ?? Zap
-            const isLandlordProvided = u.setupBy === 'landlord'
-            return (
-              <Card key={u.id}>
-                <div className="flex items-start gap-3">
-                  <span className="bg-sage-tint text-sage-deep p-2 rounded-full">
-                    <Icon size={16} />
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-xs text-muted uppercase tracking-widest">{u.category}</p>
-                    <p className="font-heading text-lg">{u.name}</p>
-                    {u.note && <p className="text-sm text-muted mt-1">{u.note}</p>}
-                    {!isLandlordProvided && (
-                      <div className="mt-2">
-                        {u.phone && (
-                          <ContactRow
-                            contact={{ kind: 'phone', value: u.phone }}
-                            title="Call to set up"
-                          />
-                        )}
-                        {u.email && (
-                          <ContactRow
-                            contact={{ kind: 'email', value: u.email }}
-                            title={u.email}
-                          />
-                        )}
-                        {u.link && (
-                          <ContactRow
-                            contact={{ kind: 'url', value: u.link, label: 'Set up service' }}
-                            title="Set up online"
-                          />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            )
-          })}
+      {/* Cards: Quick info + Rent */}
+      <section className="space-y-4">
+        <QuickInfoCard />
+        <RentCard
+          total={total}
+          breakdownOpen={breakdownOpen}
+          onToggleBreakdown={() => setBreakdownOpen((v) => !v)}
+        />
+      </section>
+
+      {/* Setup & Documents */}
+      <section className="space-y-4">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+          Setup & documents
+        </p>
+        <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
+          <SetupRow
+            Icon={PowerIcon}
+            label="Utilities"
+            onClick={() => setOpenSheet('utilities')}
+          />
+          <Divider />
+          <SetupRow
+            Icon={DocumentIcon}
+            label="Documents"
+            onClick={() => setOpenSheet('documents')}
+          />
+          <Divider />
+          <SetupRow
+            Icon={BookBookmarkIcon}
+            label="House Manual"
+            onClick={() => setOpenSheet('manual')}
+          />
         </div>
       </section>
 
-      {/* Documents */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Documents</h2>
-        <Card>
-          <ul className="divide-y divide-border">
-            {documents.map((d) => {
-              const ready = d.file.length > 0
-              return (
-                <li key={d.id}>
-                  {ready ? (
-                    <a
-                      href={d.file}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="flex items-center gap-3 py-3 min-h-[44px]"
-                    >
-                      <FileText size={16} className="text-sage" />
-                      <span className="flex-1">
-                        <span className="block">{d.title}</span>
-                        {d.description && (
-                          <span className="block text-muted text-xs">{d.description}</span>
-                        )}
-                      </span>
-                      <span className="text-muted text-xs">View</span>
-                    </a>
-                  ) : (
-                    <div className="flex items-center gap-3 py-3 min-h-[44px] text-muted">
-                      <FileText size={16} />
-                      <span className="flex-1">
-                        <span className="block">{d.title}</span>
-                        {d.description && (
-                          <span className="block text-xs">{d.description}</span>
-                        )}
-                      </span>
-                      <span className="text-xs">Coming soon</span>
-                    </div>
-                  )}
-                </li>
-              )
-            })}
-          </ul>
-        </Card>
-      </section>
-
-      {/* House manual */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">House manual</h2>
-        <div className="space-y-3">
-          {houseManual.map((m) => (
-            <Card key={m.id}>
-              <h3 className="font-heading text-lg">{m.title}</h3>
-              {m.photo && (
-                <img
-                  src={m.photo}
-                  alt={m.title}
-                  className="rounded-card border-hair border-border my-3"
-                />
-              )}
-              <div className="space-y-2 mt-2 text-sm text-ink/90">
-                {m.body.map((paragraph, i) => (
-                  <p key={i}>{paragraph}</p>
-                ))}
-              </div>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Trash & recycling */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Trash & recycling</h2>
-        <Card>
-          <div className="flex items-start gap-3">
-            <Trash2 size={16} className="text-sage mt-1" />
-            <div className="flex-1 text-sm">
-              <p>
-                Collection: <strong>{trashRecycling.collectionDay}</strong>
-              </p>
-              <ul className="mt-3 space-y-1 list-disc list-inside text-muted">
-                {trashRecycling.rules.map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ul>
-              {trashRecycling.bulkyPickupNote && (
-                <p className="mt-3 text-muted">{trashRecycling.bulkyPickupNote}</p>
-              )}
-              <a
-                href={trashRecycling.reuseToolLink}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-block mt-3 text-sage underline underline-offset-2"
-              >
-                Look up your schedule on raleighnc.gov
-              </a>
-            </div>
-          </div>
-        </Card>
-      </section>
-
-      {/* Rent details */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Rent & payment details</h2>
-        <Card>
-          <p className="text-sm">
-            Total monthly rent: <strong>{formatMoney(totalRent)}</strong>
-          </p>
-          <p className="text-sm text-muted mt-1">
-            Base {formatMoney(rent.baseRent)} + {formatMoney(rent.internetCharge)} internet. Due
-            the {rent.dueDay}.
-          </p>
-          {rent.autoPayNote && (
-            <p className="text-sm text-muted mt-3">{rent.autoPayNote}</p>
-          )}
-          <p className="text-sm text-muted mt-3">{rent.latePolicy}</p>
-          <a
-            href={rent.paymentLink}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="inline-block mt-3 text-sage underline underline-offset-2"
-          >
-            {rent.paymentLabel}
-          </a>
-        </Card>
-      </section>
-
-      {/* Lease & contact */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Lease & contact</h2>
-        <Card>
-          <p className="text-sm">
-            Lease term: <strong>{property.leaseStart}</strong> –{' '}
-            <strong>{property.leaseEnd}</strong>
-          </p>
-          <div className="mt-3 space-y-3">
-            <p className="text-xs text-muted uppercase tracking-widest">{landlord.name}</p>
-            {landlord.contacts.map((c) => (
-              <div key={c.name}>
-                <p className="font-medium">{c.name}</p>
-                <ContactRow contact={{ kind: 'phone', value: c.phone }} title="Call" />
-                <ContactRow contact={{ kind: 'sms', value: c.phone }} title="Text" />
-                <ContactRow contact={{ kind: 'email', value: c.email }} title={c.email} />
-              </div>
-            ))}
-            <div className="text-sm text-muted">
-              <p>Preferred: {landlord.preferredContact}</p>
-              <p>Response: {landlord.responseExpectation}</p>
-            </div>
-          </div>
-          <div className="mt-4 border-t-hair border-border pt-3">
-            <p className="text-xs text-muted uppercase tracking-widest">App login (for reference)</p>
-            <p className="text-sm">
-              Username: <strong>{appAccess.username}</strong>
-            </p>
-            <p className="text-sm">
-              Password: <strong>{appAccess.password}</strong>
-            </p>
-            <p className="text-xs text-muted mt-1">{appAccess.note}</p>
-          </div>
-        </Card>
-      </section>
+      <UtilitiesSheet
+        open={openSheet === 'utilities'}
+        onClose={() => setOpenSheet(null)}
+      />
+      <DocumentsSheet
+        open={openSheet === 'documents'}
+        onClose={() => setOpenSheet(null)}
+      />
+      <HouseManualSheet open={openSheet === 'manual'} onClose={() => setOpenSheet(null)} />
     </div>
   )
+}
+
+// ----------------------------------------------------------------------
+// Quick info card — wifi password + front door code in inset tiles
+// ----------------------------------------------------------------------
+
+function QuickInfoCard() {
+  return (
+    <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-2.5">
+      <h2 className="font-heading text-[20px] leading-none text-ink">Quick info</h2>
+      <InfoTile
+        eyebrow="WIFI PASSWORD"
+        value={quickInfo.wifiPassword}
+        sub={`Network · ${quickInfo.wifiNetwork}`}
+      />
+      <InfoTile eyebrow="FRONT DOOR CODE" value={quickInfo.frontDoorCode} />
+    </div>
+  )
+}
+
+function InfoTile({
+  eyebrow,
+  value,
+  sub,
+}: {
+  eyebrow: string
+  value: string
+  sub?: string
+}) {
+  return (
+    <div className="bg-warm-card rounded-cardInner p-3">
+      <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+        {eyebrow}
+      </p>
+      <p className="font-heading text-[16px] leading-none text-ink mt-1">{value}</p>
+      {sub && (
+        <p className="font-body font-medium text-[12px] text-warm-400 mt-1">{sub}</p>
+      )}
+    </div>
+  )
+}
+
+// ----------------------------------------------------------------------
+// Rent card — total, due date, View breakdown collapse, Pay Rent + history
+// ----------------------------------------------------------------------
+
+function RentCard({
+  total,
+  breakdownOpen,
+  onToggleBreakdown,
+}: {
+  total: number
+  breakdownOpen: boolean
+  onToggleBreakdown: () => void
+}) {
+  return (
+    <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
+      <div>
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+          Rent
+        </p>
+        <p className="font-heading text-[32px] leading-none text-ink mt-1">
+          {formatMoney(total)}
+        </p>
+        <p className="font-body font-medium text-[12px] text-warm-400 mt-2">
+          {nextDueDateLabel(rent.dueDayOfMonth)}
+        </p>
+      </div>
+
+      <Divider />
+
+      <button
+        type="button"
+        onClick={onToggleBreakdown}
+        aria-expanded={breakdownOpen}
+        className="w-full flex items-center justify-between min-h-[28px] text-left"
+      >
+        <span className="font-heading text-[14px] tracking-[0.14px] text-ink">
+          View breakdown
+        </span>
+        <CaratDownIcon
+          size={16}
+          className={[
+            'text-warm-500 transition-transform',
+            breakdownOpen ? 'rotate-180' : '',
+          ].join(' ')}
+        />
+      </button>
+
+      {breakdownOpen && (
+        <div className="text-sm text-warm-400 space-y-1.5 -mt-2">
+          <div className="flex justify-between">
+            <span>Base rent</span>
+            <span className="text-ink">{formatMoney(rent.baseRent)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Internet (Google Fiber)</span>
+            <span className="text-ink">{formatMoney(rent.internetCharge)}</span>
+          </div>
+          <div className="flex justify-between border-t-hair border-warm-100 pt-1.5 mt-1.5">
+            <span>Total · {rent.dueDay}</span>
+            <span className="text-ink font-medium">{formatMoney(total)}</span>
+          </div>
+          <p className="pt-2">{rent.autoPayNote}</p>
+          <p>{rent.latePolicy}</p>
+        </div>
+      )}
+
+      <div className="flex gap-2.5">
+        <a
+          href={rent.paymentLink}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="flex-1 bg-sage text-white rounded-cardInner px-4 py-3 font-heading text-[18px] tracking-[0.05em] text-center min-h-[47px] flex items-center justify-center active:bg-sage-deep active:scale-[0.98] transition"
+        >
+          Pay Rent
+        </a>
+        <button
+          type="button"
+          aria-label="Payment history"
+          title="Payment history (coming soon)"
+          className="bg-card border-hair border-warm-100 rounded-cardInner px-4 py-3 min-h-[47px] flex items-center justify-center text-warm-500"
+        >
+          <HistoryIcon size={20} />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ----------------------------------------------------------------------
+// Setup & Documents row — icon chip + label + right chevron
+// ----------------------------------------------------------------------
+
+function SetupRow({
+  Icon,
+  label,
+  onClick,
+}: {
+  Icon: typeof PowerIcon
+  label: string
+  onClick: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-2.5 text-left min-h-[44px]"
+    >
+      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage shrink-0">
+        <Icon size={20} />
+      </span>
+      <span className="flex-1 font-heading text-[16px] leading-[20px] text-ink">{label}</span>
+      <CaratDownIcon size={16} className="-rotate-90 text-warm-500" />
+    </button>
+  )
+}
+
+function Divider() {
+  return <div className="h-px bg-warm-50" />
 }

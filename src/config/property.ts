@@ -131,7 +131,8 @@ export const rent = {
   baseRent: 1900,
   internetCharge: 70, // Google Fiber, added on top of base rent
   // totalDue is base + internet = 1970; compute in code or set explicitly.
-  dueDay: "1st of each month",
+  dueDayOfMonth: 1, // numeric — used to compute "Due Jul 1 · in 15 days"
+  dueDay: "1st of each month", // human display — kept for the breakdown view
   // The external payment deep link. Currently Venmo; may switch to Zelle later.
   paymentLabel: "Pay rent with Venmo",
   paymentLink: "https://venmo.com/u/jason-schmitt-3",
@@ -147,6 +148,7 @@ export const rent = {
 export const quickInfo = {
   wifiNetwork: "TODO: WiFi network name",
   wifiPassword: "TODO: WiFi password",
+  frontDoorCode: "TODO: front door code",
   trashDay: "Thursday (weekly)",
   recyclingNote: "Recycling is collected every other week — see the Trash & Recycling section.",
 };

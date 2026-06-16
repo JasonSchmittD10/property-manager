@@ -167,3 +167,149 @@ export function CityGuideIcon({ size = 18, className }: IconProps) {
     </svg>
   )
 }
+
+// ----------------------------------------------------------------------
+// Property page icons (from Figma 1:1359)
+// ----------------------------------------------------------------------
+
+export function PowerIcon({ size = 20, className }: IconProps) {
+  // Lightning bolt — utility chip on Setup & Documents row.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 16.0001"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M8.00002 1.00004L6.00002 7.00004H13L6.00002 15L8.00002 9.00004H1.00002L8.00002 1.00004Z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+export function DocumentIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M4 0.5H10C11.9299 0.5 13.5 2.07014 13.5 4V12C13.5 13.9299 11.9299 15.5 10 15.5H4C2.07014 15.5 0.5 13.9299 0.5 12V4C0.5 2.07014 2.07014 0.5 4 0.5ZM9.5 9.5C8.39586 9.5 7.5 10.3959 7.5 11.5C7.5 12.6041 8.39586 13.5 9.5 13.5C10.6041 13.5 11.5 12.6041 11.5 11.5C11.5 10.3959 10.6041 9.5 9.5 9.5ZM4 6.5C3.17053 6.5 2.5 7.17218 2.5 8C2.5 8.82782 3.17053 9.5 4 9.5H6C6.82947 9.5 7.5 8.82782 7.5 8C7.5 7.17218 6.82947 6.5 6 6.5H4ZM4 2.5C3.17053 2.5 2.5 3.17218 2.5 4C2.5 4.82782 3.17053 5.5 4 5.5H10C10.8295 5.5 11.5 4.82782 11.5 4C11.5 3.17218 10.8295 2.5 10 2.5H4Z"
+        fill="currentColor"
+        stroke="currentColor"
+      />
+    </svg>
+  )
+}
+
+export function BookBookmarkIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 18.0001"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M3 1.5H11C11.8285 1.5 12.5 2.17154 12.5 3V8.5H3.5C2.73077 8.5 2.03098 8.79156 1.5 9.26758V3C1.5 2.17154 2.17154 1.5 3 1.5ZM4 5.5C3.17156 5.5 2.5 6.17156 2.5 7C2.5 7.82844 3.17156 8.5 4 8.5C4.82844 8.5 5.5 7.82844 5.5 7C5.5 6.17156 4.82844 5.5 4 5.5ZM4 1.5C3.17156 1.5 2.5 2.17156 2.5 3C2.5 3.82844 3.17156 4.5 4 4.5C4.82844 4.5 5.5 3.82844 5.5 3C5.5 2.17156 4.82844 1.5 4 1.5Z"
+        fill="currentColor"
+        stroke="currentColor"
+      />
+      <path
+        d="M11.5 14H12"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M1 11.5V3C1 1.8954 1.8954 1 3 1H11C12.1046 1 13 1.8954 13 3V9H3.5C2.1193 9 1 10.1193 1 11.5ZM1 11.5C1 12.8807 2.1193 14 3.5 14H7.5"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.75 11.5H5.25C4.8359 11.5 4.5 11.8359 4.5 12.25V17.25C4.5 17.5703 4.7031 17.8555 5.0068 17.959C5.3105 18.0615 5.6455 17.9629 5.8418 17.711L7 16.2217L8.1582 17.711C8.3027 17.8965 8.5234 18.0001 8.75 18.0001C8.8311 18.0001 8.9131 17.9864 8.9932 17.9591C9.2969 17.8556 9.5 17.5704 9.5 17.2501V12.2501C9.5 11.836 9.1641 11.5 8.75 11.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+export function HistoryIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 15.9291 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M2.29613 1.044L1.70013 4.798L5.44513 4.145L2.29613 1.044Z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.92913 5V8L9.92913 10"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M2.92913 3.101C4.20013 1.804 5.97013 1 7.92913 1C11.7951 1 14.9291 4.134 14.9291 8C14.9291 11.866 11.7951 15 7.92913 15C4.40313 15 1.48513 12.392 1.00013 9"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+export function CaratDownIcon({ size = 16, className }: IconProps) {
+  // Used as both "View breakdown" caret and (rotated) the row chevrons.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 10.6667 5.07967"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M0.666678 0.666967L4.8127 4.22070C5.11229 4.47749 5.55438 4.47749 5.85397 4.22070L9.99999 0.666967"
+        stroke="currentColor"
+        strokeWidth="1.33333"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
