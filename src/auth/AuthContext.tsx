@@ -1,10 +1,11 @@
 // Light client-side gate — NOT real authentication.
-// This deters casual access only. Credentials live in `.env` (VITE_APP_USERNAME /
-// VITE_APP_PASSWORD) and are shipped in the client bundle. Anyone with the bundle can
+// This deters casual access only. Credentials live in `src/config/property.ts`
+// (appAccess) and are shipped in the client bundle. Anyone with the bundle can
 // recover them. Do not store anything sensitive behind this gate. This is an
 // intentional tradeoff for a personal single-tenant app — do not "fix" by adding a
 // real backend.
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { appAccess } from '../config/property'
 
 interface AuthState {
   isAuthed: boolean
@@ -29,9 +30,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signIn = useCallback((username: string, password: string, remember: boolean) => {
-    const okUser = import.meta.env.VITE_APP_USERNAME ?? ''
-    const okPass = import.meta.env.VITE_APP_PASSWORD ?? ''
-    if (username.trim() === okUser && password === okPass) {
+    if (username.trim() === appAccess.username && password === appAccess.password) {
       sessionStorage.setItem(STORAGE_KEY, '1')
       if (remember) localStorage.setItem(STORAGE_KEY, '1')
       setIsAuthed(true)
