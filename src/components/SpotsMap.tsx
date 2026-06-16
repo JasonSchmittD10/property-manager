@@ -1,8 +1,19 @@
 import { useEffect, useMemo } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import { ExternalLink, Map as MapIcon } from 'lucide-react'
 import { guide, type GuideSpot } from '../config/property'
 import geocodeCache from '../content/geocode-cache.json'
+
+// Build a Google Maps search URL — prefer the name + town for a rich
+// business result (hours, reviews), fall back to raw coords if the spot
+// has no town set.
+function googleMapsUrl(s: { name: string; town?: string; lat: number; lng: number }): string {
+  const query = s.town
+    ? `${s.name}, ${s.town}, NC`
+    : `${s.lat},${s.lng}`
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`
+}
 
 type ResolvedSpot = GuideSpot & { lat: number; lng: number; category: string }
 
@@ -110,8 +121,8 @@ export function SpotsMap({ preview = false }: SpotsMapProps) {
         />
         {spots.map((s) => (
           <Marker key={s.id} position={[s.lat, s.lng]} icon={spotIcon}>
-            <Popup>
-              <div className="bg-card rounded-cardLg border-hair border-warm-100 p-3 max-w-[240px]">
+            <Popup minWidth={240} maxWidth={260} autoPan>
+              <div className="bg-card rounded-cardLg border-hair border-warm-100 p-3 w-[240px]">
                 <p className="font-heading text-[16px] leading-tight text-ink">{s.name}</p>
                 {s.town && (
                   <p className="font-body text-[12px] text-muted mt-0.5">{s.town}</p>
@@ -119,16 +130,28 @@ export function SpotsMap({ preview = false }: SpotsMapProps) {
                 <p className="font-body text-[13px] text-warm-700 mt-2 leading-snug">
                   {s.why}
                 </p>
-                {s.link && (
+                <div className="mt-3 flex items-center gap-4">
                   <a
-                    href={s.link}
+                    href={googleMapsUrl(s)}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="inline-block mt-2 text-sage text-[13px] font-medium"
+                    className="inline-flex items-center gap-1 text-sage text-[13px] font-medium"
                   >
-                    Open
+                    <MapIcon size={13} />
+                    Google Maps
                   </a>
-                )}
+                  {s.link && (
+                    <a
+                      href={s.link}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="inline-flex items-center gap-1 text-sage text-[13px] font-medium"
+                    >
+                      <ExternalLink size={13} />
+                      Website
+                    </a>
+                  )}
+                </div>
               </div>
             </Popup>
           </Marker>

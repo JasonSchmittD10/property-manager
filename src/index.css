@@ -31,6 +31,13 @@
   padding: 6px 8px 0 0 !important;
   font-size: 18px !important;
 }
+/* Override Leaflet's default link color (.leaflet-container a { color: #0078A8 })
+   inside popups so our sage links render correctly. All popup anchors are
+   sage CTAs in this app, so a blanket sage works. */
+.leaflet-popup-content a {
+  color: #688557;
+  text-decoration: none;
+}
 
 @layer base {
   html,
