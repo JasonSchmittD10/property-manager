@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Check, Copy } from 'lucide-react'
 import { property, rent, quickInfo } from '../config/property'
 import { formatMoney, nextDueDateLabel } from '../lib/format'
 import {
@@ -166,15 +167,47 @@ function RentCard({
         </div>
       )}
 
+      <PayWithZelle />
+    </div>
+  )
+}
+
+// ----------------------------------------------------------------------
+// Pay with Zelle — copy the landlord's Zelle handle, then the tenant
+// pastes it into their bank's Zelle screen. Zelle has no deep-link.
+// ----------------------------------------------------------------------
+
+function PayWithZelle() {
+  const [copied, setCopied] = useState(false)
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(rent.paymentRecipient)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      /* clipboard not available — leave button idle */
+    }
+  }
+  return (
+    <div className="space-y-2">
       <div className="flex gap-2.5">
-        <a
-          href={rent.paymentLink}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="flex-1 bg-sage text-white rounded-cardInner px-4 py-3 font-heading text-[18px] tracking-[0.05em] text-center min-h-[47px] flex items-center justify-center active:bg-sage-deep active:scale-[0.98] transition"
+        <button
+          type="button"
+          onClick={copy}
+          className="flex-1 bg-sage text-white rounded-cardInner px-4 py-3 font-heading text-[18px] tracking-[0.05em] text-center min-h-[47px] flex items-center justify-center gap-2 active:bg-sage-deep active:scale-[0.98] transition"
         >
-          Pay Rent
-        </a>
+          {copied ? (
+            <>
+              <Check size={18} />
+              Copied
+            </>
+          ) : (
+            <>
+              <Copy size={18} />
+              Copy Zelle email
+            </>
+          )}
+        </button>
         <button
           type="button"
           aria-label="Payment history"
@@ -184,6 +217,10 @@ function RentCard({
           <HistoryIcon size={20} />
         </button>
       </div>
+      <p className="font-body font-medium text-[12px] text-warm-700">
+        Sends to <span className="text-ink">{rent.paymentRecipient}</span> via Zelle.{' '}
+        {rent.paymentInstructions}
+      </p>
     </div>
   )
 }

@@ -171,8 +171,7 @@ export default function Home() {
           Icon={RefreshCcw}
           title="Pay Rent"
           sub={nextDueDateLabel(rent.dueDayOfMonth)}
-          href={rent.paymentLink}
-          external
+          to="/property"
         />
         <ActionChip
           Icon={MessageSquareWarning}

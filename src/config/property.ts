@@ -157,9 +157,13 @@ export const rent = {
   // totalDue is base + internet = 1970; compute in code or set explicitly.
   dueDayOfMonth: 1, // numeric — used to compute "Due Jul 1 · in 15 days"
   dueDay: "1st of each month", // human display — kept for the breakdown view
-  // The external payment deep link. Currently Venmo; may switch to Zelle later.
-  paymentLabel: "Pay rent with Venmo",
-  paymentLink: "https://venmo.com/u/jason-schmitt-3",
+  // Zelle has no deep-link payment URL — the tenant pastes paymentRecipient
+  // into their bank's Zelle screen. Recipient can be an email or US phone.
+  paymentMethod: "Zelle" as const,
+  paymentLabel: "Pay rent with Zelle",
+  paymentRecipient: "jschmittj1@gmail.com",
+  paymentInstructions:
+    "Open your bank's app, find Zelle, and send to the address above.",
   autoPayNote: rentNotesData.autoPayNote,
   latePolicy: rentNotesData.latePolicy,
 };
