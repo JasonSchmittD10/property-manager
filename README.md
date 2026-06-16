@@ -6,20 +6,14 @@ A small mobile-first web app that serves as the tenant home base for 5716 Bashfo
 
 ```bash
 npm install
-cp .env.example .env  # then edit values
 npm run dev           # http://localhost:5173
 ```
 
 ## Configuring credentials
 
-The login gate compares against two env vars, read at build time:
+The login gate compares against `appAccess.username` / `appAccess.password` in [`src/config/property.ts`](src/config/property.ts). Edit those values directly — no `.env` to maintain.
 
-```
-VITE_APP_USERNAME=...
-VITE_APP_PASSWORD=...
-```
-
-Put them in `.env` (gitignored) for local dev, and in your host's environment-variable settings for production. **These ship in the client bundle** — see the security note below.
+These ship in the client bundle (see security note below), so this is "deter casual access" protection, not real security.
 
 ## Editing content
 
@@ -27,11 +21,11 @@ All editable content (rent amount, wifi, utility info, house manual, neighborhoo
 
 ## Adding documents
 
-Drop PDFs into `public/docs/` using the filenames referenced in `property.documents[].file`. Defaults: `lease.pdf`, `inspection.pdf`, `welcome.pdf`, `utilities.pdf`, `deposit.pdf`. To rename or add documents, edit the array in the config file.
+Drop PDFs into `public/documents/` and reference them from `documents[].file` in the config (e.g. `/documents/lease.pdf`). Leave `file` as `""` if you haven't added the PDF yet — the row renders as "Coming soon" until you do.
 
 ## Adding photos
 
-Drop images into `public/images/` and reference them from the config (`heroPhoto`, `manual[].photo`, etc.) by path like `/images/hero.jpg`.
+Drop images into `public/photos/` and reference them from the config (e.g. `property.heroPhoto`, `houseManual[].photo`) by path like `/photos/bashford-hero.jpg`.
 
 ## Deploying
 
@@ -40,8 +34,7 @@ The app is a pure static site. Recommended: Vercel or Netlify.
 1. Push the repo to GitHub.
 2. Create a new project on Vercel / Netlify and point it at the repo.
 3. Build command: `npm run build`. Output dir: `dist`.
-4. In the project's env-var settings, add `VITE_APP_USERNAME` and `VITE_APP_PASSWORD`.
-5. Deploy.
+4. Deploy. (No env vars to configure — credentials live in the config file.)
 
 If you use React Router with `BrowserRouter` (as configured), add a SPA fallback so deep links work: on Vercel, this is automatic; on Netlify, add `/*  /index.html  200` to `public/_redirects`.
 

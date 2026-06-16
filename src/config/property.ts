@@ -112,8 +112,9 @@ export const property = {
 
 // ----------------------------------------------------------------------
 // Shared app login (light gate — see note at top of file)
-// Read from .env in code; mirrored here only so the Property tab can
-// display the credentials for tenants who forget them.
+// These values are the SINGLE source of truth for the login gate.
+// They ship in the client bundle (same as any client-side gate), so this
+// is "deter casual access" protection, not real security.
 // ----------------------------------------------------------------------
 
 export const appAccess = {
