@@ -34,6 +34,7 @@ export default function Login() {
           <input
             autoCapitalize="none"
             autoCorrect="off"
+            autoComplete="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="mt-1 w-full bg-card border-hair border-border rounded-pill px-4 py-3 text-ink"
@@ -43,6 +44,7 @@ export default function Login() {
           <span className="text-sm text-muted">Password</span>
           <input
             type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="mt-1 w-full bg-card border-hair border-border rounded-pill px-4 py-3 text-ink"
@@ -57,7 +59,9 @@ export default function Login() {
           />
           Keep me signed in on this device
         </label>
-        {error && <p className="text-danger text-sm">{error}</p>}
+        <p role="alert" aria-live="polite" className="text-ink text-sm min-h-[1.25rem]">
+          {error}
+        </p>
         <button
           type="submit"
           className="w-full bg-sage text-white rounded-pill py-3 font-medium active:bg-sage-deep active:scale-[0.98] transition"

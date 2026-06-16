@@ -21,6 +21,11 @@
     font-weight: 500;
     line-height: 1.2;
   }
+  /* Brief forbids weights >= 600. <strong>/<b> default to 700; pin to 500. */
+  b,
+  strong {
+    font-weight: 500;
+  }
   :focus-visible {
     @apply outline-none ring-2 ring-sage ring-offset-2 ring-offset-canvas;
   }

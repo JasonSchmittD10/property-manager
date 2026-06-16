@@ -27,8 +27,8 @@ export function Sheet({ open, onClose, title, children }: Props) {
       aria-label={title}
       className="fixed inset-0 z-50 flex items-end justify-center"
     >
-      <button
-        aria-label="Close"
+      <div
+        aria-hidden="true"
         onClick={onClose}
         className="absolute inset-0 bg-ink/30"
       />

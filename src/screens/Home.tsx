@@ -36,7 +36,7 @@ export default function Home() {
             <p className="text-xs text-muted uppercase tracking-widest">Rent</p>
             <p className="font-heading text-3xl mt-1">{formatMoney(total)}</p>
             <p className="text-muted text-sm mt-1">
-              Due the {ordinal(rent.dueDayOfMonth)} · includes ${rent.internetAmount} internet
+              Due the {ordinal(rent.dueDayOfMonth)} · includes {formatMoney(rent.internetAmount)} internet
             </p>
           </div>
         </div>
