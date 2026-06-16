@@ -8,91 +8,186 @@ interface IconProps {
 }
 
 // ----------------------------------------------------------------------
-// New floating-pill bottom nav icons (Figma 1:1332).
-// Filled iconoir variants — color swap drives default/selected state.
+// Floating-pill bottom nav + circular Emergency icons.
+// All paths copied verbatim from the Figma icon frames (1:1284 and 1:177)
+// — fills/strokes converted from var(--fill-0, #212121) to currentColor
+// so the icons inherit color from the parent text-* class.
 // ----------------------------------------------------------------------
 
+// view-all (Figma 1:1278) — Main nav tab.
 export function NavMainIcon({ size = 20, className }: IconProps) {
-  // view-all — 2x2 grid of filled rounded squares.
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className={className}
-    >
-      <rect x="3" y="3" width="6" height="6" rx="1.25" />
-      <rect x="11" y="3" width="6" height="6" rx="1.25" />
-      <rect x="3" y="11" width="6" height="6" rx="1.25" />
-      <rect x="11" y="11" width="6" height="6" rx="1.25" />
-    </svg>
-  )
-}
-
-export function NavPropertyIcon({ size = 20, className }: IconProps) {
-  // house-7-fill — solid house silhouette with door cutout.
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      fillRule="evenodd"
-      clipRule="evenodd"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M10.78 1.93a1.25 1.25 0 0 0-1.56 0L2.47 7.33a1.25 1.25 0 0 0-.47.98v8.19c0 .55.45 1 1 1h4.5v-5.25c0-.83.67-1.5 1.5-1.5h2c.83 0 1.5.67 1.5 1.5v5.25H17c.55 0 1-.45 1-1V8.31c0-.39-.18-.75-.47-.98z" />
-    </svg>
-  )
-}
-
-export function NavGuideIcon({ size = 20, className }: IconProps) {
-  // location-filled — solid pin with a circular cutout.
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 20 20"
-      fill="currentColor"
-      fillRule="evenodd"
-      clipRule="evenodd"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className={className}
-    >
-      <path d="M10 2c-3.31 0-6 2.66-6 5.94 0 4.5 5.4 9.62 5.63 9.84.21.2.54.2.75 0 .23-.22 5.62-5.34 5.62-9.84C16 4.66 13.31 2 10 2zm0 7.94a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-    </svg>
-  )
-}
-
-export function NavEmergencyIcon({ size = 28, className }: IconProps) {
-  // Alert glyph for the circular emergency button (Figma 6:613).
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
       className={className}
     >
       <path
-        d="M12 3L2 20h20L12 3z"
+        d="M7 1H2C1.44772 1 1 1.44772 1 2V6C1 6.55228 1.44772 7 2 7H7C7.55228 7 8 6.55228 8 6V2C8 1.44772 7.55228 1 7 1Z"
         fill="currentColor"
-      />
-      <path
-        d="M12 10v4"
-        stroke="white"
+        stroke="currentColor"
         strokeWidth="2"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <circle cx="12" cy="17" r="1" fill="white" />
+      <path
+        d="M14 4H13C12.4477 4 12 4.44772 12 5V13C12 13.5523 12.4477 14 13 14H14C14.5523 14 15 13.5523 15 13V5C15 4.44772 14.5523 4 14 4Z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7 11H4C3.44772 11 3 11.4477 3 12V14C3 14.5523 3.44772 15 4 15H7C7.55228 15 8 14.5523 8 14V12C8 11.4477 7.55228 11 7 11Z"
+        fill="currentColor"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+// house-7-fill (Figma 1:1283) — Property nav tab.
+export function NavPropertyIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 17.0011 16.499"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M8.49957 4.605L1.49957 9.253V12.499C1.49957 14.705 3.29357 16.499 5.49957 16.499H7.49957V13.499C7.49957 12.947 7.94657 12.499 8.49957 12.499C9.05257 12.499 9.49957 12.947 9.49957 13.499V16.499H11.4996C13.7056 16.499 15.4996 14.705 15.4996 12.499V9.282L8.49957 4.605ZM9.49957 10C9.49957 10.276 9.27557 10.5 8.99957 10.5H7.99957C7.72357 10.5 7.49957 10.276 7.49957 10V9C7.49957 8.724 7.72357 8.5 7.99957 8.5H8.99957C9.27557 8.5 9.49957 8.724 9.49957 9V10Z" />
+      <path d="M16.5546 5.168L9.05457 0.168C8.71857 -0.056 8.28157 -0.056 7.94557 0.168L4.50057 2.465V1.5C4.50057 0.948 4.05357 0.5 3.50057 0.5C2.94757 0.5 2.50057 0.948 2.50057 1.5V3.798L0.445572 5.168C-0.0144275 5.474 -0.138427 6.095 0.168573 6.555C0.473573 7.014 1.09357 7.139 1.55557 6.832L8.50057 2.202L15.4456 6.832C15.6166 6.946 15.8086 7 15.9996 7C16.3226 7 16.6406 6.844 16.8326 6.555C17.1396 6.096 17.0146 5.474 16.5546 5.168Z" />
+    </svg>
+  )
+}
+
+// location-filled (Figma 1:1484) — Guide nav tab.
+export function NavGuideIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M2.0181 11.2065C1.3763 11.5842 1 12.0258 1 12.5C1 13.8807 4.134 15 8 15C11.866 15 15 13.8807 15 12.5C15 12.0234 14.6199 11.5796 13.9718 11.2006"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 0C4.9673 0 2.5 2.4673 2.5 5.5C2.5 9.4893 7.2432 12.6973 7.4453 12.832C7.6133 12.9438 7.8066 13 8 13C8.1953 13 8.3911 12.9429 8.5601 12.8286C8.7618 12.6924 13.5 9.4443 13.5 5.5C13.5 2.4673 11.0327 0 8 0ZM8 7C7.1729 7 6.5 6.3271 6.5 5.5C6.5 4.6729 7.1729 4 8 4C8.8271 4 9.5 4.6729 9.5 5.5C9.5 6.3271 8.8271 7 8 7Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+// triangle-warning (Figma 1:1235) — circular Emergency button.
+export function NavEmergencyIcon({ size = 28, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 15.5021 14.041"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M6.38904 1.536L0.964042 10.932C0.359042 11.98 1.11504 13.291 2.32604 13.291H13.176C14.387 13.291 15.143 11.981 14.538 10.932L9.11304 1.536C8.50804 0.488 6.99404 0.488 6.38904 1.536Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.75104 4.541V8.041"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.75104 11.61C7.19904 11.61 6.75104 11.161 6.75104 10.61C6.75104 10.059 7.19904 9.61 7.75104 9.61C8.30304 9.61 8.75104 10.059 8.75104 10.61C8.75104 11.161 8.30304 11.61 7.75104 11.61Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+// bell (Figma 4:480) — utility / notifications.
+export function BellIcon({ size = 20, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18.3333 17.5"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M6.30859 10.6673C6.27025 10.8562 6.25 11.0513 6.25 11.25C6.25 12.8608 7.55583 14.1667 9.16667 14.1667C10.7775 14.1667 12.0833 12.8608 12.0833 11.25C12.0833 11.0513 12.0631 10.8562 12.0248 10.6673H6.30859Z" />
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M9.16667 0C12.8486 0 15.8333 2.98477 15.8333 6.66667V11.9247C15.6717 11.8582 15.5054 11.7941 15.3345 11.7343C13.7167 11.168 11.5359 10.8333 9.16667 10.8333C6.79737 10.8333 4.61667 11.168 2.99886 11.7343C2.82791 11.7941 2.66159 11.8582 2.5 11.9247V6.66667C2.5 2.98477 5.48477 0 9.16667 0ZM9.16667 1.66667C6.86548 1.66667 5 3.53215 5 5.83333H6.66667C6.66667 4.45262 7.78592 3.33333 9.16667 3.33333V1.66667Z"
+      />
+      <path d="M16.6667 13.75C16.6667 13.6947 16.6363 13.5239 16.3135 13.2568C15.996 12.9942 15.4864 12.7199 14.7835 12.474C13.3853 11.9847 11.3995 11.6667 9.16667 11.6667C6.93385 11.6667 4.94804 11.9847 3.54981 12.474C2.84695 12.7199 2.33733 12.9942 2.01986 13.2568C1.6971 13.5239 1.66667 13.6947 1.66667 13.75C1.66667 13.8052 1.6971 13.9761 2.01986 14.2432C2.33733 14.5058 2.84695 14.7801 3.54981 15.026C4.94804 15.5153 6.93385 15.8333 9.16667 15.8333C11.3995 15.8333 13.3853 15.5153 14.7835 15.026C15.4864 14.7801 15.996 14.5058 16.3135 14.2432C16.6363 13.9761 16.6667 13.8052 16.6667 13.75ZM18.3333 13.75C18.3333 14.5002 17.8969 15.0965 17.3763 15.5273C16.8504 15.9625 16.1395 16.3173 15.3345 16.5991C13.7167 17.1653 11.5359 17.5 9.16667 17.5C6.79738 17.5 4.61667 17.1653 2.99886 16.5991C2.19383 16.3173 1.48294 15.9625 0.957033 15.5273C0.436408 15.0965 0 14.5002 0 13.75C0 12.9998 0.436408 12.4035 0.957033 11.9727C1.48294 11.5375 2.19383 11.1827 2.99886 10.9009C4.61667 10.3347 6.79738 10 9.16667 10C11.5359 10 13.7167 10.3347 15.3345 10.9009C16.1395 11.1827 16.8504 11.5375 17.3763 11.9727C17.8969 12.4035 18.3333 12.9998 18.3333 13.75Z" />
+    </svg>
+  )
+}
+
+// siren (Figma 1:1229) — alternative emergency / alert icon.
+export function SirenIcon({ size = 18, className }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 17"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M9 0.75V2.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14.834 3.166L13.773 4.227" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17.25 9H15.75" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.16602 3.166L4.22701 4.227" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M0.75 9H2.25" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M14 13.25H4C3.5858 13.25 3.25 13.5858 3.25 14V15.5C3.25 15.9142 3.5858 16.25 4 16.25H14C14.4142 16.25 14.75 15.9142 14.75 15.5V14C14.75 13.5858 14.4142 13.25 14 13.25Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.75 13.25V9C4.75 6.653 6.653 4.75 9 4.75C11.347 4.75 13.25 6.653 13.25 9V13.25"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M9 7.75C8.3105 7.75 7.75 8.3105 7.75 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
