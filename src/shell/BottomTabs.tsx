@@ -3,7 +3,7 @@ import {
   DashboardIcon,
   PropertyIcon,
   CityGuideIcon,
-} from '../components/icons/NavIcons'
+} from '../components/icons/Icons'
 
 const tabs = [
   { to: '/', label: 'Dashboard', Icon: DashboardIcon, end: true },
