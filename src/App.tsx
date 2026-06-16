@@ -1,7 +1,15 @@
+import { AuthProvider } from './auth/AuthContext'
+import AuthGate from './auth/AuthGate'
+
 export default function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-2xl">Bashford — scaffolding</h1>
-    </div>
+    <AuthProvider>
+      <AuthGate>
+        <div className="p-6">
+          <h1 className="font-heading text-2xl">Signed in</h1>
+          <p className="text-muted">Shell will render here.</p>
+        </div>
+      </AuthGate>
+    </AuthProvider>
   )
 }
