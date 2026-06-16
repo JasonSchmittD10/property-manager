@@ -9,7 +9,7 @@
     {
       "id": "inspection",
       "title": "Move-in / move-out inspection checklist",
-      "file": "",
+      "file": "/documents/move-in-inspection-checklist.pdf",
       "description": "Condition report for move-in and move-out."
     },
     {
@@ -23,12 +23,6 @@
       "title": "Utilities setup guide",
       "file": "/documents/utilities-setup-guide.pdf",
       "description": "Step-by-step for setting up every utility."
-    },
-    {
-      "id": "deposit-receipt",
-      "title": "Security deposit receipt",
-      "file": "",
-      "description": "Confirmation of your deposit and where it's held."
     }
   ]
 }
