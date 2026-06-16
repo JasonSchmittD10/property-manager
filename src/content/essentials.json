@@ -1,9 +1,39 @@
 {
   "items": [
-    { "id": "hospital", "label": "Hospital / urgent care", "name": "TODO", "phone": "TODO" },
-    { "id": "pharmacy", "label": "Pharmacy", "name": "TODO", "phone": "TODO" },
-    { "id": "hardware", "label": "Hardware store", "name": "TODO" },
-    { "id": "gas", "label": "Gas station", "name": "TODO" },
-    { "id": "vet", "label": "Vet", "name": "TODO", "phone": "TODO" }
+    {
+      "id": "hospital",
+      "label": "Hospital / urgent care",
+      "name": "TODO",
+      "phone": "TODO",
+      "link": ""
+    },
+    {
+      "id": "pharmacy",
+      "label": "Pharmacy",
+      "name": "TODO",
+      "phone": "TODO",
+      "link": ""
+    },
+    {
+      "id": "hardware",
+      "label": "Hardware store",
+      "name": "TODO",
+      "phone": "",
+      "link": ""
+    },
+    {
+      "id": "gas",
+      "label": "Gas station",
+      "name": "TODO",
+      "phone": "",
+      "link": ""
+    },
+    {
+      "id": "test",
+      "label": "Tests",
+      "name": "TODO",
+      "phone": "TODO",
+      "link": ""
+    }
   ]
 }
