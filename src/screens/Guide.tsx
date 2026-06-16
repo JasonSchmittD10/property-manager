@@ -1,174 +1,108 @@
-import {
-  welcomeNote,
-  guide,
-  essentials,
-  community,
-  seasonalTips,
-  landlord,
-  favoritesMap,
-} from '../config/property'
-import { Card } from '../components/Card'
 import { Link } from 'react-router-dom'
-import { ChevronRight, ExternalLink, Map } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
+import { landlord, favoritesMap, welcomeNote, essentials } from '../config/property'
+import { PowerIcon } from '../components/icons/Icons'
+import { SpotsMap } from '../components/SpotsMap'
+
+// Figma 9:410 — Guide. Header + map preview + "The Neighborhood" row that
+// opens the full map. Welcome note and essentials live below the fold for
+// tenants who scroll. Detailed category lists were dropped — pins on the
+// map serve that purpose now.
 
 function isResolvedUrl(s: string | undefined): s is string {
   return !!s && /^https?:\/\//.test(s)
 }
 
 export default function Guide() {
-  const populatedCategories = guide.filter((c) => c.spots.length > 0)
-
   return (
-    <div className="px-4 space-y-6">
-      <header className="pt-2">
-        <h1 className="font-heading text-3xl">Guide</h1>
-        <p className="text-muted text-sm">A few favorites from {landlord.name}.</p>
+    <div className="px-6 pt-2 pb-8 space-y-7">
+      <header>
+        <h1 className="font-heading text-[36px] leading-none text-ink">Your Guide</h1>
+        <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
+          A few favorites from {landlord.name}.
+        </p>
       </header>
 
-      {/* Welcome */}
-      <Card>
-        <p className="text-xs uppercase tracking-widest text-muted">
+      {favoritesMap.enabled && (
+        <section className="space-y-4">
+          <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+            Our recommendations
+          </p>
+
+          <Link to="/guide/map" aria-label="Open the favorite-spots map" className="block">
+            <SpotsMap preview />
+          </Link>
+
+          <Link
+            to="/guide/map"
+            className="bg-card border-hair border-warm-100 rounded-cardLg p-4 flex items-center gap-3"
+          >
+            <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage shrink-0">
+              <PowerIcon size={20} />
+            </span>
+            <span className="flex-1 font-heading text-[16px] leading-tight text-ink">
+              The Neighborhood
+            </span>
+            <ChevronRight size={16} className="text-warm-500" />
+          </Link>
+        </section>
+      )}
+
+      {/* A note from Jason & Abby */}
+      <section className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-3">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
           A note from {landlord.name}
         </p>
-        <h2 className="font-heading text-2xl mt-2">{welcomeNote.heading}</h2>
-        <div className="mt-3 space-y-3 text-ink/90">
+        <h2 className="font-heading text-[20px] leading-tight text-ink">
+          {welcomeNote.heading}
+        </h2>
+        <div className="space-y-2 text-sm text-ink/90">
           {welcomeNote.body.map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
-        <p className="mt-4 text-muted">{welcomeNote.signoff}</p>
-      </Card>
-
-      {/* Our favorite spots — full-screen map */}
-      {favoritesMap.enabled && (
-        <Link
-          to="/guide/map"
-          aria-label={favoritesMap.linkLabel}
-          className="block"
-        >
-          <Card className="flex items-center gap-3">
-            <Map size={20} className="text-sage" />
-            <div className="flex-1">
-              <p className="font-heading text-lg">{favoritesMap.linkLabel}</p>
-              <p className="text-sm text-muted">Explore the map</p>
-            </div>
-            <ChevronRight size={18} className="text-sage" />
-          </Card>
-        </Link>
-      )}
-
-      {/* Neighborhood */}
-      {populatedCategories.length > 0 && (
-        <section>
-          <h2 className="font-heading text-xl mb-3">Neighborhood</h2>
-          <div className="space-y-5">
-            {populatedCategories.map((cat) => (
-              <div key={cat.id}>
-                <p className="text-xs uppercase tracking-widest text-muted mb-2">{cat.title}</p>
-                <div className="space-y-3">
-                  {cat.spots.map((s) => (
-                    <Card key={s.id}>
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex-1">
-                          <p className="font-heading text-lg">{s.name}</p>
-                          {s.town && <p className="text-xs text-muted">{s.town}</p>}
-                          <p className="text-sm text-muted mt-1">{s.why}</p>
-                        </div>
-                        {isResolvedUrl(s.link) && (
-                          <a
-                            href={s.link}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            aria-label={`Open ${s.name}`}
-                            className="text-sage p-2"
-                          >
-                            <ExternalLink size={16} />
-                          </a>
-                        )}
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Getting around / essentials */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Getting around</h2>
-        <Card>
-          <ul className="divide-y divide-border">
-            {essentials.map((n) => (
-              <li key={n.id} className="py-3">
-                <p className="text-xs text-muted uppercase tracking-widest">{n.label}</p>
-                <div className="flex items-center justify-between">
-                  <p>{n.name}</p>
-                  {isResolvedUrl(n.link) ? (
-                    <a
-                      href={n.link}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="text-sage text-sm"
-                    >
-                      Open
-                    </a>
-                  ) : n.phone && n.phone !== 'TODO' ? (
-                    <a
-                      href={`tel:${n.phone.replace(/[^+\d]/g, '')}`}
-                      className="text-sage text-sm"
-                    >
-                      Call
-                    </a>
-                  ) : null}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <p className="text-warm-700 text-sm">{welcomeNote.signoff}</p>
       </section>
 
-      {/* Community (optional) */}
-      {community.show && community.items.length > 0 && (
-        <section>
-          <h2 className="font-heading text-xl mb-3">{community.heading}</h2>
-          <Card>
-            <p className="text-sm text-muted">{community.intro}</p>
-            <ul className="divide-y divide-border mt-3">
-              {community.items.map((item) => (
-                <li key={item.id} className="py-3">
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-muted">{item.detail}</p>
-                  {isResolvedUrl(item.link) && (
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="inline-block mt-1 text-sage text-sm underline underline-offset-2"
-                    >
-                      Visit website
-                    </a>
-                  )}
+      {/* Getting around */}
+      {essentials.length > 0 && (
+        <section className="space-y-4">
+          <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+            Getting around
+          </p>
+          <div className="bg-card border-hair border-warm-100 rounded-cardLg">
+            <ul className="divide-y divide-warm-100">
+              {essentials.map((n) => (
+                <li key={n.id} className="px-4 py-3">
+                  <p className="text-xs text-warm-500 uppercase tracking-eyebrow font-body font-bold">
+                    {n.label}
+                  </p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="font-heading text-[16px] text-ink">{n.name}</p>
+                    {isResolvedUrl(n.link) ? (
+                      <a
+                        href={n.link}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-sage text-sm font-medium"
+                      >
+                        Open
+                      </a>
+                    ) : n.phone && !n.phone.startsWith('TODO') ? (
+                      <a
+                        href={`tel:${n.phone.replace(/[^+\d]/g, '')}`}
+                        className="text-sage text-sm font-medium"
+                      >
+                        Call
+                      </a>
+                    ) : null}
+                  </div>
                 </li>
               ))}
             </ul>
-          </Card>
+          </div>
         </section>
       )}
-
-      {/* Seasonal */}
-      <section>
-        <h2 className="font-heading text-xl mb-3">Seasonal tips</h2>
-        <div className="space-y-3">
-          {seasonalTips.map((t) => (
-            <Card key={t.id}>
-              <p className="font-heading text-lg">{t.title}</p>
-              <p className="text-sm text-muted mt-1">{t.body}</p>
-            </Card>
-          ))}
-        </div>
-      </section>
     </div>
   )
 }

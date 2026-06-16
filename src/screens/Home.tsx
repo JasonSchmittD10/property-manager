@@ -1,135 +1,195 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
-  property,
-  rent,
-  quickInfo,
-  maintenance,
-  landlord,
-  announcements,
-} from '../config/property'
-import { Card } from '../components/Card'
-import { Button } from '../components/Button'
-import { ContactRow } from '../components/ContactRow'
-import { CopyField } from '../components/CopyField'
-import { formatMoney, formatDate } from '../lib/format'
-import { Wifi, Trash2, Wrench } from 'lucide-react'
+  Trash2,
+  X,
+  RefreshCcw,
+  MessageSquareWarning,
+  Wifi,
+  Users,
+} from 'lucide-react'
+import { property, rent, quickInfo, maintenance } from '../config/property'
+import { nextDueDateLabel } from '../lib/format'
+
+// Figma 4:392 — Home dashboard. Dynamic eyebrow/greeting, dismissable trash
+// reminder, 2x2 action chips, hero photo, verse of the day. Detailed
+// property info lives on the Property tab; this is the at-a-glance view.
+
+function todayEyebrow(now: Date = new Date()): string {
+  const weekday = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase()
+  const month = now.toLocaleDateString('en-US', { month: 'long' }).toUpperCase()
+  return `${weekday}, ${month} ${now.getDate()}`
+}
+
+function greeting(now: Date = new Date()): string {
+  const hour = now.getHours()
+  if (hour < 12) return "Goodmorning, Y'all"
+  if (hour < 17) return "Good afternoon, Y'all"
+  return "Good evening, Y'all"
+}
+
+// Returns true if tomorrow matches the configured trash collection day.
+function isTrashDayTomorrow(now: Date = new Date()): boolean {
+  const match = quickInfo.trashDay.match(
+    /Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday/i,
+  )
+  if (!match) return false
+  const trashWeekday = match[0].toLowerCase()
+  const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000)
+  const tomorrowWeekday = tomorrow
+    .toLocaleDateString('en-US', { weekday: 'long' })
+    .toLowerCase()
+  return tomorrowWeekday === trashWeekday
+}
 
 export default function Home() {
-  const total = rent.baseRent + rent.internetCharge
+  const [trashDismissed, setTrashDismissed] = useState(false)
+  const showTrash = !trashDismissed && isTrashDayTomorrow()
 
   return (
-    <div className="px-4 space-y-4">
-      {/* Hero */}
-      <div className="rounded-hero overflow-hidden border-hair border-border bg-surface">
-        {property.heroPhoto ? (
+    <div className="px-6 pt-2 pb-8 space-y-7">
+      {/* Header */}
+      <header>
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+          {todayEyebrow()}
+        </p>
+        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
+          {greeting()}
+        </h1>
+        <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
+          It's a beautiful day to be in Raleigh!
+        </p>
+      </header>
+
+      {/* Trash day reminder */}
+      {showTrash && (
+        <div className="relative bg-card border-hair border-warm-100 rounded-cardLg p-4">
+          <button
+            type="button"
+            onClick={() => setTrashDismissed(true)}
+            aria-label="Dismiss"
+            className="absolute top-3 right-3 text-warm-500 p-1 min-h-[28px] min-w-[28px] flex items-center justify-center"
+          >
+            <X size={18} />
+          </button>
+          <Trash2 size={20} className="text-ink" />
+          <p className="font-heading text-[16px] leading-tight text-ink mt-2">
+            Tomorrow is Trash Day!
+          </p>
+          <p className="font-body font-medium text-[12px] text-warm-700 mt-1">
+            Trash usually comes by 7am, be sure to get those cans out the night before.
+          </p>
+        </div>
+      )}
+
+      {/* Action chips — 2x2 */}
+      <div className="grid grid-cols-2 gap-2">
+        <ActionChip
+          Icon={RefreshCcw}
+          title="Pay Rent"
+          sub={nextDueDateLabel(rent.dueDayOfMonth)}
+          href={rent.paymentLink}
+          external
+        />
+        <ActionChip
+          Icon={MessageSquareWarning}
+          title="Report a Problem"
+          sub="Let us know of any issues!"
+          href={maintenance.contactMethod}
+        />
+        <ActionChip
+          Icon={Wifi}
+          title="Wifi"
+          sub="No current outages."
+          to="/property"
+        />
+        <ActionChip
+          Icon={Users}
+          title="Nextdoor"
+          sub="Check the community."
+          href="https://nextdoor.com"
+          external
+        />
+      </div>
+
+      {/* Hero photo */}
+      {property.heroPhoto && (
+        <div className="aspect-[4/3] rounded-cardLg overflow-hidden">
           <img
             src={property.heroPhoto}
             alt={property.name}
-            className="w-full h-44 object-cover"
+            className="w-full h-full object-cover"
             onError={(e) => {
-              // Hide broken image so the warm sage-tint fallback shows through.
               ;(e.currentTarget as HTMLImageElement).style.display = 'none'
             }}
           />
-        ) : (
-          <div className="w-full h-44 bg-sage-tint" aria-hidden />
-        )}
-        <div className="p-5 bg-card">
-          <p className="text-xs tracking-widest text-muted uppercase">Welcome to</p>
-          <h1 className="font-heading text-3xl mt-1">{property.name}</h1>
-          <p className="text-muted mt-1">
-            {property.address} · {property.cityStateZip}
-          </p>
         </div>
+      )}
+
+      {/* Verse of the day */}
+      <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+          Verse of the day
+        </p>
+        <p className="font-heading text-[16px] leading-tight text-ink mt-1">
+          Micah 6:8 ESV
+        </p>
+        <p className="font-body font-medium text-[12px] text-warm-700 mt-2 leading-snug">
+          He has told you, O man, what is good; and what does the Lord require of you but
+          to do justice, and to love kindness, and to walk humbly with your God?
+        </p>
       </div>
-
-      {/* Rent */}
-      <Card>
-        <div>
-          <p className="text-xs text-muted uppercase tracking-widest">Rent</p>
-          <p className="font-heading text-3xl mt-1">{formatMoney(total)}</p>
-          <p className="text-muted text-sm mt-1">
-            Due the {rent.dueDay} · includes {formatMoney(rent.internetCharge)} internet
-          </p>
-        </div>
-        <Button
-          fullWidth
-          className="mt-4"
-          onClick={() => window.open(rent.paymentLink, '_blank', 'noopener')}
-        >
-          {rent.paymentLabel}
-        </Button>
-      </Card>
-
-      {/* Quick info: wifi + trash */}
-      <Card>
-        <div className="flex items-center gap-2 mb-2">
-          <Wifi size={16} className="text-sage" />
-          <h2 className="font-heading text-lg">Wifi & trash</h2>
-        </div>
-        <CopyField label="Network" value={quickInfo.wifiNetwork} />
-        <CopyField label="Password" value={quickInfo.wifiPassword} />
-        <div className="flex items-start gap-2 pt-3 border-t-hair border-border mt-2">
-          <Trash2 size={16} className="text-sage mt-1" />
-          <div className="text-sm flex-1">
-            <p>Trash: {quickInfo.trashDay}</p>
-            <p className="text-muted mt-1">{quickInfo.recyclingNote}</p>
-          </div>
-        </div>
-      </Card>
-
-      {/* Report a problem */}
-      <Card>
-        <div className="flex items-center gap-2 mb-2">
-          <Wrench size={16} className="text-sage" />
-          <h2 className="font-heading text-lg">Something not working?</h2>
-        </div>
-        <p className="text-muted text-sm">{maintenance.blurb}</p>
-        <ContactRow
-          contact={{ kind: 'url', value: maintenance.contactMethod, label: 'Report a problem' }}
-          title="Report a problem"
-        />
-        <p className="text-muted text-xs mt-1">{maintenance.emergencyReminder}</p>
-      </Card>
-
-      {/* Announcements */}
-      <Card>
-        <h2 className="font-heading text-lg">Announcements</h2>
-        {announcements.length === 0 ? (
-          <p className="text-muted text-sm mt-2">All quiet — nothing new from us right now.</p>
-        ) : (
-          <ul className="mt-2 space-y-3">
-            {announcements.map((a) => (
-              <li key={a.id}>
-                <p className="text-xs text-muted uppercase tracking-widest">{formatDate(a.date)}</p>
-                <p className="font-medium">{a.title}</p>
-                <p className="text-sm text-muted">{a.body}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card>
-
-      {/* Quick contact — both landlords */}
-      <Card>
-        <h2 className="font-heading text-lg">Reach {landlord.name}</h2>
-        {landlord.contacts.map((c) => (
-          <div key={c.name} className="mt-2 first:mt-1">
-            <p className="text-xs text-muted uppercase tracking-widest">{c.name}</p>
-            <ContactRow
-              contact={{ kind: 'phone', value: c.phone, label: 'Call' }}
-              title="Call"
-            />
-            <ContactRow
-              contact={{ kind: 'sms', value: c.phone, label: 'Text' }}
-              title="Text"
-            />
-            <ContactRow
-              contact={{ kind: 'email', value: c.email, label: c.email }}
-              title="Email"
-            />
-          </div>
-        ))}
-      </Card>
     </div>
+  )
+}
+
+// ----------------------------------------------------------------------
+// Action chip — sage-tint icon chip + Cal Sans label + warm-700 sub.
+// ----------------------------------------------------------------------
+
+type ActionChipProps = {
+  Icon: typeof Wifi
+  title: string
+  sub: string
+} & (
+  | { to: string; href?: never; external?: never }
+  | { href: string; to?: never; external?: boolean }
+)
+
+function ActionChip(props: ActionChipProps) {
+  const { Icon, title, sub } = props
+  const inner = (
+    <>
+      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage">
+        <Icon size={18} />
+      </span>
+      <span className="block font-heading text-[14px] tracking-[0.01em] text-ink mt-3">
+        {title}
+      </span>
+      <span className="block font-body font-medium text-[12px] text-warm-700 mt-1">
+        {sub}
+      </span>
+    </>
+  )
+  const cls =
+    'bg-card border-hair border-warm-100 rounded-cardLg p-4 flex flex-col items-start min-h-[120px]'
+
+  if (props.to) {
+    return (
+      <Link to={props.to} className={cls}>
+        {inner}
+      </Link>
+    )
+  }
+  const external = props.external
+  return (
+    <a
+      href={props.href}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noreferrer noopener' : undefined}
+      className={cls}
+    >
+      {inner}
+    </a>
   )
 }

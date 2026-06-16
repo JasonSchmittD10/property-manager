@@ -66,7 +66,12 @@ function FitToBounds({ spots }: { spots: ResolvedSpot[] }) {
   return null
 }
 
-export function SpotsMap() {
+interface SpotsMapProps {
+  /** Preview mode: shorter, non-interactive (used as a thumbnail). */
+  preview?: boolean
+}
+
+export function SpotsMap({ preview = false }: SpotsMapProps) {
   const spots = useMemo(resolveSpots, [])
 
   if (spots.length === 0) {
@@ -81,13 +86,22 @@ export function SpotsMap() {
   // Center is set immediately by FitToBounds; this is just an initial value.
   const center: [number, number] = [spots[0].lat, spots[0].lng]
 
+  const sizingClass = preview
+    ? 'block w-full h-[240px]'
+    : 'block w-full h-[calc(100vh-18rem)] min-h-[420px]'
+
   return (
     <div className="overflow-hidden rounded-cardLg border-hair border-warm-100">
       <MapContainer
         center={center}
         zoom={12}
-        scrollWheelZoom={false}
-        className="block w-full h-[calc(100vh-18rem)] min-h-[420px]"
+        scrollWheelZoom={!preview}
+        dragging={!preview}
+        doubleClickZoom={!preview}
+        touchZoom={!preview}
+        zoomControl={!preview}
+        attributionControl={!preview}
+        className={sizingClass}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
