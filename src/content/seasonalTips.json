@@ -1,0 +1,14 @@
+{
+  "items": [
+    {
+      "id": "pollen",
+      "title": "Pollen season (spring)",
+      "body": "Raleigh springs are heavy on pollen — change your HVAC filter more often to keep the air clean and the system happy."
+    },
+    {
+      "id": "freeze",
+      "title": "First freeze (late fall)",
+      "body": "Before the first hard freeze, disconnect any hoses and cover the outdoor faucet to prevent a burst pipe."
+    }
+  ]
+}

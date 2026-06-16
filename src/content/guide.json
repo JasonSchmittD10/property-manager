@@ -1,0 +1,63 @@
+{
+  "categories": [
+    {
+      "id": "coffee",
+      "title": "Coffee & cafés",
+      "spots": [
+        {
+          "id": "cultivate",
+          "name": "Cultivate Coffee Roasters",
+          "town": "Fuquay-Varina",
+          "why": "TODO: why you love it"
+        }
+      ]
+    },
+    {
+      "id": "outdoors",
+      "title": "Parks, trails & outdoors",
+      "spots": [
+        {
+          "id": "bass-lake",
+          "name": "Bass Lake Park",
+          "town": "Holly Springs",
+          "why": "TODO: why you love it (lakeside trails)"
+        },
+        {
+          "id": "hilltop",
+          "name": "Hilltop Needmore Town Park",
+          "town": "Fuquay-Varina",
+          "why": "TODO: why you love it (trail running, dog walks)"
+        }
+      ]
+    },
+    {
+      "id": "dogs",
+      "title": "Dog-friendly",
+      "spots": [
+        {
+          "id": "fv-dog-park",
+          "name": "Fuquay-Varina Dog Park",
+          "town": "Fuquay-Varina",
+          "why": "TODO: why you love it"
+        }
+      ]
+    },
+    {
+      "id": "eats",
+      "title": "Eats & drinks",
+      "spots": [
+        {
+          "id": "aviator",
+          "name": "Aviator Brewing",
+          "town": "Fuquay-Varina",
+          "why": "TODO: why you love it"
+        }
+      ]
+    },
+    {
+      "id": "grocery",
+      "title": "Grocery & essentials",
+      "spots": []
+    }
+  ]
+}

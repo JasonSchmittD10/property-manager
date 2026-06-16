@@ -1,0 +1,276 @@
+# Sveltia CMS configuration for the Bashford tenant app.
+#
+# IMPORTANT — one-time setup (see docs/CMS-SETUP.md):
+#   1. Replace `repo:` with the real GitHub OWNER/REPO.
+#   2. Replace `base_url:` with the deployed Sveltia OAuth worker URL.
+#
+# Editing in the CMS writes JSON files under src/content/ and uploads
+# media to public/photos or public/documents. The repo's tsconfig has
+# `resolveJsonModule: true`, and src/config/property.ts imports each
+# JSON file and re-exports it under its existing TypeScript interface,
+# so a malformed save will fail the Vercel build loudly.
+
+backend:
+  name: github
+  repo: OWNER/REPO            # TODO(user): set to the GitHub owner/repo, e.g. JasonSchmittD10/property-manager
+  branch: main
+  base_url: https://YOUR-WORKER-URL   # TODO(user): the deployed Sveltia OAuth worker URL (no trailing slash)
+
+# Default media library — hero photo + house manual photos.
+media_folder: "public/photos"
+public_folder: "/photos"
+
+# UI niceties
+publish_mode: simple
+display_url: /
+site_url: /
+
+collections:
+  # ----------------------------------------------------------------------
+  # ANNOUNCEMENTS — high-value: post a notice that appears on Home.
+  # Each announcement is its own file in src/content/announcements/.
+  # The app reads src/content/announcements.json (an aggregated array),
+  # so a save-time merge step would be nice but is overkill here: this
+  # collection writes directly to announcements.json as a list of items.
+  # ----------------------------------------------------------------------
+  - name: announcements
+    label: "Announcements & alerts"
+    label_singular: "Announcement"
+    description: "Notices shown on the Home screen. Leave empty for the quiet state."
+    files:
+      - name: announcements
+        label: "Announcements list"
+        file: "src/content/announcements.json"
+        format: json
+        fields:
+          - name: items
+            label: "Announcements"
+            label_singular: "Announcement"
+            widget: list
+            allow_add: true
+            collapsed: false
+            summary: "{{fields.title}} — {{fields.date}}"
+            fields:
+              - { name: id, label: "ID (lowercase, no spaces)", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: title, label: "Title", widget: string }
+              - { name: date, label: "Date", widget: datetime, date_format: "YYYY-MM-DD", time_format: false, picker_utc: false }
+              - { name: body, label: "Body", widget: text }
+
+  # ----------------------------------------------------------------------
+  # WELCOME NOTE (Guide tab — top card)
+  # ----------------------------------------------------------------------
+  - name: welcome
+    label: "Welcome note"
+    files:
+      - name: welcome
+        label: "Welcome note"
+        file: "src/content/welcome.json"
+        format: json
+        fields:
+          - { name: heading, label: "Heading", widget: string }
+          - name: body
+            label: "Body paragraphs"
+            label_singular: "Paragraph"
+            widget: list
+            field: { name: paragraph, label: "Paragraph", widget: text }
+          - { name: signoff, label: "Sign-off", widget: string }
+
+  # ----------------------------------------------------------------------
+  # RENT NOTES — only the free-text bits. Math + payment link stay in code.
+  # ----------------------------------------------------------------------
+  - name: rent_notes
+    label: "Rent — notes"
+    files:
+      - name: rent_notes
+        label: "Rent notes"
+        file: "src/content/rentNotes.json"
+        format: json
+        fields:
+          - { name: autoPayNote, label: "AutoPay note", widget: text }
+          - { name: latePolicy, label: "Late policy", widget: text }
+
+  # ----------------------------------------------------------------------
+  # HERO PHOTO (Home screen) — single media field.
+  # ----------------------------------------------------------------------
+  - name: property_media
+    label: "Hero photo"
+    files:
+      - name: property_media
+        label: "Hero photo"
+        file: "src/content/propertyMedia.json"
+        format: json
+        fields:
+          - name: heroPhoto
+            label: "Hero photo"
+            widget: image
+            required: true
+            media_folder: "public/photos"
+            public_folder: "/photos"
+
+  # ----------------------------------------------------------------------
+  # HOUSE MANUAL — repeatable entries, each with optional photo.
+  # ----------------------------------------------------------------------
+  - name: house_manual
+    label: "House manual"
+    files:
+      - name: house_manual
+        label: "House manual entries"
+        file: "src/content/houseManual.json"
+        format: json
+        fields:
+          - name: items
+            label: "Entries"
+            label_singular: "Entry"
+            widget: list
+            allow_add: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: "ID (lowercase, no spaces)", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: title, label: "Title", widget: string }
+              - name: photo
+                label: "Photo (optional)"
+                widget: image
+                required: false
+                media_folder: "public/photos"
+                public_folder: "/photos"
+              - name: body
+                label: "Body paragraphs"
+                label_singular: "Paragraph"
+                widget: list
+                field: { name: paragraph, label: "Paragraph", widget: text }
+
+  # ----------------------------------------------------------------------
+  # GUIDE — categories of favorite local spots.
+  # ----------------------------------------------------------------------
+  - name: guide
+    label: "Guide — neighborhood spots"
+    files:
+      - name: guide
+        label: "Guide categories"
+        file: "src/content/guide.json"
+        format: json
+        fields:
+          - name: categories
+            label: "Categories"
+            label_singular: "Category"
+            widget: list
+            allow_add: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: "Category ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: title, label: "Category title", widget: string }
+              - name: spots
+                label: "Spots"
+                label_singular: "Spot"
+                widget: list
+                allow_add: true
+                summary: "{{fields.name}}"
+                fields:
+                  - { name: id, label: "Spot ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+                  - { name: name, label: "Name", widget: string }
+                  - { name: town, label: "Town (optional)", widget: string, required: false }
+                  - { name: why, label: "Why you love it", widget: text }
+                  - { name: link, label: "Link (optional)", widget: string, required: false }
+
+  # ----------------------------------------------------------------------
+  # ESSENTIALS — nearest hospital, pharmacy, etc.
+  # ----------------------------------------------------------------------
+  - name: essentials
+    label: "Essentials — getting around"
+    files:
+      - name: essentials
+        label: "Essentials"
+        file: "src/content/essentials.json"
+        format: json
+        fields:
+          - name: items
+            label: "Items"
+            label_singular: "Item"
+            widget: list
+            allow_add: true
+            summary: "{{fields.label}}: {{fields.name}}"
+            fields:
+              - { name: id, label: "ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: label, label: "Label (e.g. Pharmacy)", widget: string }
+              - { name: name, label: "Place name", widget: string }
+              - { name: phone, label: "Phone (optional)", widget: string, required: false }
+              - { name: link, label: "Link (optional)", widget: string, required: false }
+
+  # ----------------------------------------------------------------------
+  # SEASONAL TIPS
+  # ----------------------------------------------------------------------
+  - name: seasonal_tips
+    label: "Seasonal tips"
+    files:
+      - name: seasonal_tips
+        label: "Seasonal tips"
+        file: "src/content/seasonalTips.json"
+        format: json
+        fields:
+          - name: items
+            label: "Tips"
+            label_singular: "Tip"
+            widget: list
+            allow_add: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: "ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: title, label: "Title", widget: string }
+              - { name: body, label: "Body", widget: text }
+
+  # ----------------------------------------------------------------------
+  # COMMUNITY (Faith & community section on Guide)
+  # ----------------------------------------------------------------------
+  - name: community
+    label: "Faith & community"
+    files:
+      - name: community
+        label: "Community section"
+        file: "src/content/community.json"
+        format: json
+        fields:
+          - { name: show, label: "Show this section?", widget: boolean, default: true }
+          - { name: heading, label: "Heading", widget: string }
+          - { name: intro, label: "Intro paragraph", widget: text }
+          - name: items
+            label: "Items"
+            label_singular: "Item"
+            widget: list
+            allow_add: true
+            summary: "{{fields.name}}"
+            fields:
+              - { name: id, label: "ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: name, label: "Name", widget: string }
+              - { name: detail, label: "Detail", widget: text }
+              - { name: link, label: "Link (optional)", widget: string, required: false }
+
+  # ----------------------------------------------------------------------
+  # DOCUMENTS — each entry can attach a PDF that uploads to public/documents.
+  # Sveltia handles committing the PDF and storing the path back into "file".
+  # ----------------------------------------------------------------------
+  - name: documents
+    label: "Documents (PDFs)"
+    files:
+      - name: documents
+        label: "Documents"
+        file: "src/content/documents.json"
+        format: json
+        media_folder: "public/documents"
+        public_folder: "/documents"
+        fields:
+          - name: items
+            label: "Documents"
+            label_singular: "Document"
+            widget: list
+            allow_add: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: id, label: "ID", widget: string, pattern: ['^[a-z0-9-]+$', "lowercase letters, numbers, hyphens"] }
+              - { name: title, label: "Title", widget: string }
+              - { name: description, label: "Description (optional)", widget: text, required: false }
+              - name: file
+                label: "PDF file (optional — leave blank to show 'Coming soon')"
+                widget: file
+                required: false
+                media_folder: "public/documents"
+                public_folder: "/documents"

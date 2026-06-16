@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": "thermostat",
+      "title": "Thermostat & HVAC",
+      "body": [
+        "TODO: thermostat model/location and how to use it.",
+        "TODO: note the filter size and where spares are kept; remind tenant to change it regularly."
+      ]
+    },
+    {
+      "id": "water-shutoff",
+      "title": "Water shut-off location",
+      "body": ["TODO: where the main water shut-off is and how to use it in an emergency."]
+    },
+    {
+      "id": "breaker",
+      "title": "Breaker panel",
+      "body": ["TODO: where the electrical breaker panel is located and any labeling notes."]
+    },
+    {
+      "id": "disposal",
+      "title": "Garbage disposal reset",
+      "body": [
+        "TODO: if it stops working, here's how to reset it (the red reset button on the bottom of the unit, plus the wall switch)."
+      ]
+    },
+    {
+      "id": "appliances",
+      "title": "Appliance quirks & notes",
+      "body": ["TODO: any appliance quirks worth knowing (oven runs hot, dishwasher cycle, etc.)."]
+    },
+    {
+      "id": "yard",
+      "title": "Lawn & yard",
+      "body": ["TODO: lawn/yard expectations — who mows, trash bin storage, outdoor faucet location."]
+    }
+  ]
+}

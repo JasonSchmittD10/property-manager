@@ -1,0 +1,13 @@
+{
+  "show": true,
+  "heading": "Faith & community",
+  "intro": "If you're looking for a church home, we'd love to have you join us — no pressure, just an open invitation.",
+  "items": [
+    {
+      "id": "antioch",
+      "name": "Antioch Church",
+      "detail": "TODO: service time + a warm one-liner",
+      "link": "TODO: Antioch website"
+    }
+  ]
+}

@@ -1,17 +1,34 @@
 /**
  * property.ts — Bashford tenant app content config
  * ------------------------------------------------------------------
- * This is the SINGLE source of all editable content for the app.
- * Jason & Abby edit this file to update everything — no need to touch
- * any UI components.
+ * Hybrid model:
+ *   • Editable content (welcome note, guide, announcements, etc.) lives
+ *     in JSON files under src/content/. Those files are edited by the
+ *     landlords through the Sveltia CMS at /admin and committed to git.
+ *   • Sensitive / structural / logic-bound values (login credentials,
+ *     payment links, rent math, utility provider data, emergency info)
+ *     stay here as plain TypeScript so they can't be edited via the CMS.
  *
- * Anything marked `TODO:` needs a real value filled in before launch.
- * Everything else is pre-populated and ready.
+ * Both halves are re-exported under the same names as before, so every
+ * screen continues to import from this file unchanged. The TypeScript
+ * interfaces below stay as the contract: if a JSON file drifts out of
+ * shape, the build fails.
  *
  * Note on sensitivity: this content is gated only by a shared password,
  * which is light protection. Do NOT add truly sensitive data here
  * (SSNs, bank/account numbers, spare-key locations, etc.).
  */
+
+import welcomeData from "../content/welcome.json";
+import rentNotesData from "../content/rentNotes.json";
+import propertyMediaData from "../content/propertyMedia.json";
+import houseManualData from "../content/houseManual.json";
+import guideData from "../content/guide.json";
+import essentialsData from "../content/essentials.json";
+import seasonalTipsData from "../content/seasonalTips.json";
+import announcementsData from "../content/announcements.json";
+import documentsData from "../content/documents.json";
+import communityData from "../content/community.json";
 
 // ----------------------------------------------------------------------
 // Types
@@ -102,8 +119,8 @@ export const property = {
   name: "Bashford",
   address: "5716 Bashford Crest Ln",
   cityStateZip: "Raleigh, NC 27606",
-  // Hero image shown on Home + login. Swap for a real photo of the house.
-  heroPhoto: "/photos/bashford-hero.jpg", // TODO: add real house photo to /public/photos/
+  // Hero image is CMS-editable via propertyMedia.json (Sveltia media library).
+  heroPhoto: propertyMediaData.heroPhoto,
 
   // Lease term — static display only.
   leaseStart: "TODO: lease start date (e.g. 2026-08-01)",
@@ -112,9 +129,7 @@ export const property = {
 
 // ----------------------------------------------------------------------
 // Shared app login (light gate — see note at top of file)
-// These values are the SINGLE source of truth for the login gate.
-// They ship in the client bundle (same as any client-side gate), so this
-// is "deter casual access" protection, not real security.
+// CODE ONLY — never expose via CMS.
 // ----------------------------------------------------------------------
 
 export const appAccess = {
@@ -125,6 +140,9 @@ export const appAccess = {
 
 // ----------------------------------------------------------------------
 // Rent + payment (deep-link only — app never processes payment)
+// Math fields and payment link stay in code so the CMS can't break
+// the breakdown or send tenants to a wrong URL. Only the free-text
+// notes (latePolicy, autoPayNote) are CMS-editable.
 // ----------------------------------------------------------------------
 
 export const rent = {
@@ -136,13 +154,13 @@ export const rent = {
   // The external payment deep link. Currently Venmo; may switch to Zelle later.
   paymentLabel: "Pay rent with Venmo",
   paymentLink: "https://venmo.com/u/jason-schmitt-3",
-  autoPayNote: "If you set up AutoPay in the payment app, it shows here.",
-  latePolicy:
-    "TODO: late policy text (e.g. rent is due on the 1st; a late fee of $X applies after the 5th).",
+  autoPayNote: rentNotesData.autoPayNote,
+  latePolicy: rentNotesData.latePolicy,
 };
 
 // ----------------------------------------------------------------------
-// Quick info (Home dashboard strip)
+// Quick info (Home dashboard strip) — stays in code (wifi/door codes
+// are credentials and don't belong in the CMS).
 // ----------------------------------------------------------------------
 
 export const quickInfo = {
@@ -166,7 +184,7 @@ export const maintenance = {
 };
 
 // ----------------------------------------------------------------------
-// Utilities (researched — ready to go)
+// Utilities (researched — ready to go). Structural; not CMS-editable.
 // ----------------------------------------------------------------------
 
 export const utilities: Utility[] = [
@@ -208,170 +226,22 @@ export const utilities: Utility[] = [
 ];
 
 // ----------------------------------------------------------------------
-// Documents (files added to /public/documents — reference by path)
+// CMS-editable content (re-exports from src/content/*.json)
 // ----------------------------------------------------------------------
 
-export const documents: DocumentItem[] = [
-  {
-    id: "lease",
-    title: "Lease agreement",
-    file: "", // TODO: add /public/documents/lease.pdf
-    description: "Your signed lease and its terms.",
-  },
-  {
-    id: "inspection",
-    title: "Move-in / move-out inspection checklist",
-    file: "", // TODO: add the inspection checklist PDF
-    description: "Condition report for move-in and move-out.",
-  },
-  {
-    id: "house-rules",
-    title: "Welcome & house rules",
-    file: "", // TODO: add when built
-    description: "The basics of living at Bashford.",
-  },
-  {
-    id: "utilities-guide",
-    title: "Utilities setup guide",
-    file: "", // TODO: add the utilities guide PDF
-    description: "Step-by-step for setting up every utility.",
-  },
-  {
-    id: "deposit-receipt",
-    title: "Security deposit receipt",
-    file: "", // TODO: add when built
-    description: "Confirmation of your deposit and where it's held.",
-  },
-];
-
-// ----------------------------------------------------------------------
-// House manual (Airbnb-style "how things work")
-// Fill in the specifics; titles + structure are ready.
-// ----------------------------------------------------------------------
-
-export const houseManual: ManualEntry[] = [
-  {
-    id: "thermostat",
-    title: "Thermostat & HVAC",
-    body: [
-      "TODO: thermostat model/location and how to use it.",
-      "TODO: note the filter size and where spares are kept; remind tenant to change it regularly.",
-    ],
-  },
-  {
-    id: "water-shutoff",
-    title: "Water shut-off location",
-    body: ["TODO: where the main water shut-off is and how to use it in an emergency."],
-  },
-  {
-    id: "breaker",
-    title: "Breaker panel",
-    body: ["TODO: where the electrical breaker panel is located and any labeling notes."],
-  },
-  {
-    id: "disposal",
-    title: "Garbage disposal reset",
-    body: [
-      "TODO: if it stops working, here's how to reset it (the red reset button on the bottom of the unit, plus the wall switch).",
-    ],
-  },
-  {
-    id: "appliances",
-    title: "Appliance quirks & notes",
-    body: ["TODO: any appliance quirks worth knowing (oven runs hot, dishwasher cycle, etc.)."],
-  },
-  {
-    id: "yard",
-    title: "Lawn & yard",
-    body: ["TODO: lawn/yard expectations — who mows, trash bin storage, outdoor faucet location."],
-  },
-];
-
-// ----------------------------------------------------------------------
-// GUIDE tab — welcome note (drafted) + neighborhood spots (to fill)
-// ----------------------------------------------------------------------
-
-export const welcomeNote = {
-  heading: "Welcome home",
-  // Drafted in Jason & Abby's voice — edit freely to sound like you.
-  body: [
-    "We're so glad you're here. This house has been ours for a good while, and it holds a lot of good memories. We hope it becomes a place of rest and good memories for you too.",
-    "We've put together everything you might need right here — how to set up utilities, when the trash goes out, how things work around the house, and a few of our favorite spots nearby. If something isn't covered, or anything ever breaks or feels off, please reach out. We'd genuinely rather hear from you than have you wonder.",
-    "We believe a home is a gift, and we're grateful to share this one with you. You're always welcome at Antioch with us on a Sunday if you're looking for community — no pressure at all, just an open door.",
-    "Settle in, make it yours, and don't be a stranger.",
-  ],
-  signoff: "— Jason & Abby",
-};
-
-// Neighborhood guide. Seeded with researched area spots; Jason & Abby
-// replace/confirm and add the personal "why" lines.
-export const guide: GuideCategory[] = [
-  {
-    id: "coffee",
-    title: "Coffee & cafés",
-    spots: [
-      {
-        id: "cultivate",
-        name: "Cultivate Coffee Roasters",
-        town: "Fuquay-Varina",
-        why: "TODO: why you love it",
-      },
-      // TODO: add more
-    ],
-  },
-  {
-    id: "outdoors",
-    title: "Parks, trails & outdoors",
-    spots: [
-      {
-        id: "bass-lake",
-        name: "Bass Lake Park",
-        town: "Holly Springs",
-        why: "TODO: why you love it (lakeside trails)",
-      },
-      {
-        id: "hilltop",
-        name: "Hilltop Needmore Town Park",
-        town: "Fuquay-Varina",
-        why: "TODO: why you love it (trail running, dog walks)",
-      },
-      // TODO: add your local Raleigh/27606 parks too
-    ],
-  },
-  {
-    id: "dogs",
-    title: "Dog-friendly",
-    spots: [
-      {
-        id: "fv-dog-park",
-        name: "Fuquay-Varina Dog Park",
-        town: "Fuquay-Varina",
-        why: "TODO: why you love it",
-      },
-      // TODO: add more
-    ],
-  },
-  {
-    id: "eats",
-    title: "Eats & drinks",
-    spots: [
-      {
-        id: "aviator",
-        name: "Aviator Brewing",
-        town: "Fuquay-Varina",
-        why: "TODO: why you love it",
-      },
-      // TODO: add your go-to restaurants
-    ],
-  },
-  {
-    id: "grocery",
-    title: "Grocery & essentials",
-    spots: [
-      // TODO: your go-to grocery store, etc.
-    ],
-  },
-];
+export const documents: DocumentItem[] = documentsData.items;
+export const houseManual: ManualEntry[] = houseManualData.items;
+export const welcomeNote: { heading: string; body: string[]; signoff: string } = welcomeData;
+export const guide: GuideCategory[] = guideData.categories;
+export const essentials: EssentialItem[] = essentialsData.items;
+export const community: {
+  show: boolean;
+  heading: string;
+  intro: string;
+  items: CommunityItem[];
+} = communityData;
+export const announcements: Announcement[] = announcementsData.items;
+export const seasonalTips: SeasonalTip[] = seasonalTipsData.items;
 
 // ----------------------------------------------------------------------
 // Custom map — "Our favorite spots" (Guide tab → full-screen page)
@@ -395,37 +265,6 @@ export const favoritesMap = {
     "https://www.google.com/maps/d/u/0/viewer?mid=1tKM4APGj5nDlUaCwwzPYXGFzXfH7SdI",
 };
 
-// Practical "where's the nearest…" list.
-export const essentials: EssentialItem[] = [
-  { id: "hospital", label: "Hospital / urgent care", name: "TODO", phone: "TODO" },
-  { id: "pharmacy", label: "Pharmacy", name: "TODO", phone: "TODO" },
-  { id: "hardware", label: "Hardware store", name: "TODO" },
-  { id: "gas", label: "Gas station", name: "TODO" },
-  { id: "vet", label: "Vet", name: "TODO", phone: "TODO" },
-];
-
-// Faith & community section (Antioch included per your request).
-export const community: {
-  show: boolean;
-  heading: string;
-  intro: string;
-  items: CommunityItem[];
-} = {
-  show: true,
-  heading: "Faith & community",
-  intro:
-    "If you're looking for a church home, we'd love to have you join us — no pressure, just an open invitation.",
-  items: [
-    {
-      id: "antioch",
-      name: "Antioch Church",
-      detail: "TODO: service time + a warm one-liner",
-      link: "TODO: Antioch website",
-    },
-    // TODO: anything else — life group, local community
-  ],
-};
-
 // ----------------------------------------------------------------------
 // Trash & recycling (researched — ready)
 // ----------------------------------------------------------------------
@@ -442,34 +281,7 @@ export const trashRecycling = {
 };
 
 // ----------------------------------------------------------------------
-// Announcements (landlord → tenant notices). Empty state is fine.
-// ----------------------------------------------------------------------
-
-export const announcements: Announcement[] = [
-  // Example:
-  // { id: "filter", title: "HVAC filter swap", date: "2026-08-01", body: "Reminder to change the air filter this month." },
-];
-
-// ----------------------------------------------------------------------
-// Seasonal tips (drafted starters — edit/add)
-// ----------------------------------------------------------------------
-
-export const seasonalTips: SeasonalTip[] = [
-  {
-    id: "pollen",
-    title: "Pollen season (spring)",
-    body: "Raleigh springs are heavy on pollen — change your HVAC filter more often to keep the air clean and the system happy.",
-  },
-  {
-    id: "freeze",
-    title: "First freeze (late fall)",
-    body: "Before the first hard freeze, disconnect any hoses and cover the outdoor faucet to prevent a burst pipe.",
-  },
-  // TODO: add any Bashford-specific seasonal notes
-];
-
-// ----------------------------------------------------------------------
-// Emergency info (cross-cutting sheet)
+// Emergency info (cross-cutting sheet). Stays in code — sensitive.
 // ----------------------------------------------------------------------
 
 export const emergency = {
@@ -482,7 +294,7 @@ export const emergency = {
 };
 
 // ----------------------------------------------------------------------
-// Landlord contact
+// Landlord contact (stays in code — personal contact info).
 // ----------------------------------------------------------------------
 
 export const landlord = {
