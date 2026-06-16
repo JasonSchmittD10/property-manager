@@ -16,7 +16,7 @@ export default function Property() {
   const total = rent.baseRent + rent.internetCharge
 
   return (
-    <div className="px-6 pt-6 pb-8 space-y-7">
+    <div className="px-6 pt-12 pb-8 space-y-7">
       {/* Header */}
       <header>
         <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">

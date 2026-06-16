@@ -130,7 +130,7 @@ export default function Home() {
   const verse = useVerseOfTheDay()
 
   return (
-    <div className="px-6 pt-2 pb-8 space-y-7">
+    <div className="px-6 pt-12 pb-8 space-y-7">
       {/* Header */}
       <header>
         <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">

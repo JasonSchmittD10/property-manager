@@ -15,7 +15,7 @@ function isResolvedUrl(s: string | undefined): s is string {
 
 export default function Guide() {
   return (
-    <div className="px-6 pt-2 pb-8 space-y-7">
+    <div className="px-6 pt-12 pb-8 space-y-7">
       <header>
         <h1 className="font-heading text-[36px] leading-none text-ink">Your Guide</h1>
         <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
