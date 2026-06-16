@@ -19,7 +19,7 @@ export default function Utilities() {
           Setup
         </p>
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">Utilities</h1>
-        <p className="font-body font-medium text-[14px] text-warm-400 mt-2">
+        <p className="font-body font-medium text-[14px] text-warm-700 mt-2">
           Set up utilities in your name effective on your lease start date. Internet is
           provided by the landlord and included in rent.
         </p>
@@ -29,13 +29,13 @@ export default function Utilities() {
         {utilities.map((u) => (
           <section
             key={u.id}
-            className="bg-card border-hair border-warm-200 rounded-cardLg p-4"
+            className="bg-card border-hair border-warm-100 rounded-cardLg p-4"
           >
             <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
               {u.category}
             </p>
             <p className="font-heading text-lg text-ink mt-1">{u.name}</p>
-            {u.note && <p className="text-sm text-warm-400 mt-2">{u.note}</p>}
+            {u.note && <p className="text-sm text-warm-700 mt-2">{u.note}</p>}
             {u.setupBy === 'tenant' && (
               <div className="mt-2">
                 {u.phone && (

@@ -26,7 +26,7 @@ export default function Property() {
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
           {property.name}
         </h1>
-        <p className="font-body font-medium text-[14px] text-warm-400 mt-1">
+        <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
           {property.address}, {property.cityStateZip}
         </p>
       </header>
@@ -46,7 +46,7 @@ export default function Property() {
         <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
           Setup & documents
         </p>
-        <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-4">
           <SetupRow Icon={PowerIcon} label="Utilities" to="/property/utilities" />
           <Divider />
           <SetupRow Icon={DocumentIcon} label="Documents" to="/property/documents" />
@@ -70,7 +70,7 @@ export default function Property() {
 
 function QuickInfoCard() {
   return (
-    <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-2.5">
+    <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-2.5">
       <h2 className="font-heading text-[20px] leading-none text-ink">Quick info</h2>
       <InfoTile
         eyebrow="WIFI PASSWORD"
@@ -98,7 +98,7 @@ function InfoTile({
       </p>
       <p className="font-heading text-[16px] leading-none text-ink mt-1">{value}</p>
       {sub && (
-        <p className="font-body font-medium text-[12px] text-warm-400 mt-1">{sub}</p>
+        <p className="font-body font-medium text-[12px] text-warm-700 mt-1">{sub}</p>
       )}
     </div>
   )
@@ -118,7 +118,7 @@ function RentCard({
   onToggleBreakdown: () => void
 }) {
   return (
-    <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
+    <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-4">
       <div>
         <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
           Rent
@@ -126,7 +126,7 @@ function RentCard({
         <p className="font-heading text-[32px] leading-none text-ink mt-1">
           {formatMoney(total)}
         </p>
-        <p className="font-body font-medium text-[12px] text-warm-400 mt-2">
+        <p className="font-body font-medium text-[12px] text-warm-700 mt-2">
           {nextDueDateLabel(rent.dueDayOfMonth)}
         </p>
       </div>
@@ -152,7 +152,7 @@ function RentCard({
       </button>
 
       {breakdownOpen && (
-        <div className="text-sm text-warm-400 space-y-1.5 -mt-2">
+        <div className="text-sm text-warm-700 space-y-1.5 -mt-2">
           <div className="flex justify-between">
             <span>Base rent</span>
             <span className="text-ink">{formatMoney(rent.baseRent)}</span>

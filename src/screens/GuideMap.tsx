@@ -27,13 +27,13 @@ export default function GuideMap() {
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
           {favoritesMap.heading}
         </h1>
-        <p className="font-body font-medium text-[14px] text-warm-400 mt-2">
+        <p className="font-body font-medium text-[14px] text-warm-700 mt-2">
           {favoritesMap.blurb}
         </p>
       </header>
 
       {embedReady ? (
-        <div className="overflow-hidden rounded-cardLg border-hair border-warm-200">
+        <div className="overflow-hidden rounded-cardLg border-hair border-warm-100">
           <iframe
             title={favoritesMap.heading}
             src={favoritesMap.embedUrl}

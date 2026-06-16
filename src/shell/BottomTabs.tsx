@@ -21,15 +21,9 @@ const tabs = [
   { to: '/guide', label: 'Guide', Icon: NavGuideIcon, end: false },
 ] as const
 
-// BIG shadow stack from Figma — five layered drop-shadows.
-const PILL_SHADOW =
-  'drop-shadow-[0px_8px_9px_rgba(0,0,0,0.05)] ' +
-  'drop-shadow-[0px_33px_16.5px_rgba(0,0,0,0.05)] ' +
-  'drop-shadow-[0px_75px_22.5px_rgba(0,0,0,0.03)] ' +
-  'drop-shadow-[0px_133px_26.5px_rgba(0,0,0,0.01)]'
-
+// "BIG shadow" lives in tailwind.config.js as drop-shadow-big.
 const CHIP_BASE =
-  'bg-card border border-[rgba(142,130,112,0.2)] ' + PILL_SHADOW
+  'bg-card border border-muted/20 drop-shadow-big'
 
 export function BottomTabs() {
   const { pathname } = useLocation()

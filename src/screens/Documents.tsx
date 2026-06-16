@@ -24,7 +24,7 @@ export default function Documents() {
       {/* Files */}
       <section>
         <h2 className="font-heading text-[20px] leading-none text-ink mb-3">Files</h2>
-        <div className="bg-card border-hair border-warm-200 rounded-cardLg">
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg">
           <ul className="divide-y divide-warm-100">
             {documents.map((d) => {
               const ready = d.file.length > 0
@@ -41,7 +41,7 @@ export default function Documents() {
                       <span className="flex-1">
                         <span className="block">{d.title}</span>
                         {d.description && (
-                          <span className="block text-warm-400 text-xs">{d.description}</span>
+                          <span className="block text-warm-700 text-xs">{d.description}</span>
                         )}
                       </span>
                       <span className="text-warm-500 text-xs">View</span>
@@ -68,7 +68,7 @@ export default function Documents() {
       {/* Lease term */}
       <section>
         <h2 className="font-heading text-[20px] leading-none text-ink mb-3">Lease term</h2>
-        <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 text-sm">
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 text-sm">
           <p>
             Start: <span className="font-medium">{property.leaseStart}</span>
           </p>
@@ -81,8 +81,8 @@ export default function Documents() {
       {/* Landlord */}
       <section>
         <h2 className="font-heading text-[20px] leading-none text-ink mb-3">Landlord</h2>
-        <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
-          <p className="text-sm text-warm-400">{landlord.name}</p>
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-4">
+          <p className="text-sm text-warm-700">{landlord.name}</p>
           {landlord.contacts.map((c) => (
             <div key={c.name}>
               <p className="text-xs text-warm-500 uppercase tracking-eyebrow font-body font-bold">
@@ -99,14 +99,14 @@ export default function Documents() {
       {/* App login */}
       <section>
         <h2 className="font-heading text-[20px] leading-none text-ink mb-3">App login</h2>
-        <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 text-sm">
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 text-sm">
           <p>
             Username: <span className="font-medium">{appAccess.username}</span>
           </p>
           <p className="mt-1">
             Password: <span className="font-medium">{appAccess.password}</span>
           </p>
-          <p className="text-xs text-warm-400 mt-2">{appAccess.note}</p>
+          <p className="text-xs text-warm-700 mt-2">{appAccess.note}</p>
         </div>
       </section>
     </div>

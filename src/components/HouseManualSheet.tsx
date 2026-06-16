@@ -42,13 +42,13 @@ export function HouseManualSheet({ open, onClose }: Props) {
               <p>
                 Collection: <span className="font-medium">{trashRecycling.collectionDay}</span>
               </p>
-              <ul className="mt-3 space-y-1 list-disc list-inside text-warm-400">
+              <ul className="mt-3 space-y-1 list-disc list-inside text-warm-700">
                 {trashRecycling.rules.map((r, i) => (
                   <li key={i}>{r}</li>
                 ))}
               </ul>
               {trashRecycling.bulkyPickupNote && (
-                <p className="mt-3 text-warm-400">{trashRecycling.bulkyPickupNote}</p>
+                <p className="mt-3 text-warm-700">{trashRecycling.bulkyPickupNote}</p>
               )}
               <a
                 href={trashRecycling.reuseToolLink}
