@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Trash2,
@@ -42,9 +42,34 @@ function isTrashDayTomorrow(now: Date = new Date()): boolean {
   return tomorrowWeekday === trashWeekday
 }
 
+// Reads the /api/wifi-outage edge function on mount. Defaults to "no outage"
+// so a dev (no /api routes) or network failure never shows a scary state.
+function useWifiStatus() {
+  const [status, setStatus] = useState<{ outage: boolean; message: string }>({
+    outage: false,
+    message: 'No current outages.',
+  })
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/wifi-outage')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.message) {
+          setStatus({ outage: !!data.outage, message: data.message })
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
+  return status
+}
+
 export default function Home() {
   const [trashDismissed, setTrashDismissed] = useState(false)
   const showTrash = !trashDismissed && isTrashDayTomorrow()
+  const wifi = useWifiStatus()
 
   return (
     <div className="px-6 pt-2 pb-8 space-y-7">
@@ -100,14 +125,14 @@ export default function Home() {
         <ActionChip
           Icon={Wifi}
           title="Wifi"
-          sub="No current outages."
+          sub={wifi.message}
           to="/property"
         />
         <ActionChip
           Icon={Users}
           title="Nextdoor"
           sub="Check the community."
-          href="https://nextdoor.com"
+          href="https://nextdoor.com/neighborhood/huntersrun--raleigh--nc/"
           external
         />
       </div>

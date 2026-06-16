@@ -3,6 +3,6 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin/index.html" },
     { "source": "/admin/", "destination": "/admin/index.html" },
-    { "source": "/((?!admin|assets|photos|documents|fonts|images|docs|favicon\\.ico|.*\\..*).*)", "destination": "/" }
+    { "source": "/((?!admin|api|assets|photos|documents|fonts|images|docs|favicon\\.ico|.*\\..*).*)", "destination": "/" }
   ]
 }
