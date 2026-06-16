@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ChevronLeft, FileText } from 'lucide-react'
+import { ChevronLeft, FileText, ChevronRight } from 'lucide-react'
 import { ContactRow } from '../components/ContactRow'
 import { documents, property, landlord, appAccess } from '../config/property'
 
@@ -31,10 +31,8 @@ export default function Documents() {
               return (
                 <li key={d.id}>
                   {ready ? (
-                    <a
-                      href={d.file}
-                      target="_blank"
-                      rel="noreferrer noopener"
+                    <Link
+                      to={`/property/documents/${d.id}`}
                       className="flex items-center gap-3 px-4 py-3 min-h-[52px]"
                     >
                       <FileText size={16} className="text-sage" />
@@ -44,8 +42,8 @@ export default function Documents() {
                           <span className="block text-warm-700 text-xs">{d.description}</span>
                         )}
                       </span>
-                      <span className="text-warm-500 text-xs">View</span>
-                    </a>
+                      <ChevronRight size={16} className="text-warm-500" />
+                    </Link>
                   ) : (
                     <div className="flex items-center gap-3 px-4 py-3 min-h-[52px] text-warm-500">
                       <FileText size={16} />

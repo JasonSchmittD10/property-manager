@@ -1,22 +1,34 @@
-import { Sheet } from './Sheet'
+import { Link } from 'react-router-dom'
+import { ChevronLeft, Trash2 } from 'lucide-react'
 import { houseManual, trashRecycling } from '../config/property'
-import { Trash2 } from 'lucide-react'
 
-interface Props {
-  open: boolean
-  onClose: () => void
-}
-
-export function HouseManualSheet({ open, onClose }: Props) {
+export default function HouseManual() {
   return (
-    <Sheet open={open} onClose={onClose} title="House manual">
+    <div className="px-6 pt-4 pb-8 space-y-6">
+      <Link
+        to="/property"
+        className="inline-flex items-center gap-1 text-sage text-sm font-medium min-h-[44px]"
+      >
+        <ChevronLeft size={16} />
+        Property
+      </Link>
+
+      <header>
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+          The basics
+        </p>
+        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
+          House manual
+        </h1>
+      </header>
+
       <div className="space-y-4">
         {houseManual.map((m) => (
           <section
             key={m.id}
-            className="border-hair border-warm-100 rounded-cardInner p-4"
+            className="bg-card border-hair border-warm-100 rounded-cardLg p-4"
           >
-            <h3 className="font-heading text-lg">{m.title}</h3>
+            <h2 className="font-heading text-lg text-ink">{m.title}</h2>
             {m.photo && (
               <img
                 src={m.photo}
@@ -31,16 +43,15 @@ export function HouseManualSheet({ open, onClose }: Props) {
             </div>
           </section>
         ))}
-      </div>
 
-      <section className="mt-6">
-        <h3 className="font-heading text-lg mb-2">Trash & recycling</h3>
-        <div className="border-hair border-warm-100 rounded-cardInner p-4">
+        <section className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
+          <h2 className="font-heading text-lg text-ink mb-2">Trash & recycling</h2>
           <div className="flex items-start gap-3">
             <Trash2 size={16} className="text-sage mt-1" />
             <div className="flex-1 text-sm">
               <p>
-                Collection: <span className="font-medium">{trashRecycling.collectionDay}</span>
+                Collection:{' '}
+                <span className="font-medium">{trashRecycling.collectionDay}</span>
               </p>
               <ul className="mt-3 space-y-1 list-disc list-inside text-warm-700">
                 {trashRecycling.rules.map((r, i) => (
@@ -60,8 +71,8 @@ export function HouseManualSheet({ open, onClose }: Props) {
               </a>
             </div>
           </div>
-        </div>
-      </section>
-    </Sheet>
+        </section>
+      </div>
+    </div>
   )
 }

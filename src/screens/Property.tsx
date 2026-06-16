@@ -9,10 +9,8 @@ import {
   HistoryIcon,
   CaratDownIcon,
 } from '../components/icons/Icons'
-import { HouseManualSheet } from '../components/HouseManualSheet'
 
 export default function Property() {
-  const [manualOpen, setManualOpen] = useState(false)
   const [breakdownOpen, setBreakdownOpen] = useState(false)
   const total = rent.baseRent + rent.internetCharge
 
@@ -54,12 +52,10 @@ export default function Property() {
           <SetupRow
             Icon={BookBookmarkIcon}
             label="House Manual"
-            onClick={() => setManualOpen(true)}
+            to="/property/house-manual"
           />
         </div>
       </section>
-
-      <HouseManualSheet open={manualOpen} onClose={() => setManualOpen(false)} />
     </div>
   )
 }
