@@ -373,6 +373,28 @@ export const guide: GuideCategory[] = [
   },
 ];
 
+// ----------------------------------------------------------------------
+// Custom map — "Our favorite spots" (Guide tab → full-screen page)
+// ----------------------------------------------------------------------
+// A Google My Map the landlords built once at mymaps.google.com. The Guide
+// shows a single tappable row; tapping it opens a full-screen in-app page
+// (/guide/map) that embeds the map via iframe. The tenant stays in the app.
+// If the iframe can't render, the page shows an "Open in Google Maps"
+// fallback button using shareUrl. Editing pins in My Maps updates the map
+// automatically — no redeploy.
+// ----------------------------------------------------------------------
+
+export const favoritesMap = {
+  enabled: true,
+  linkLabel: "Our favorite spots",
+  heading: "Our favorite spots",
+  blurb: "A few of the places we love around the area — tap a pin to learn more.",
+  embedUrl:
+    "https://www.google.com/maps/d/u/0/embed?mid=1tKM4APGj5nDlUaCwwzPYXGFzXfH7SdI&ehbc=2E312F",
+  shareUrl:
+    "https://www.google.com/maps/d/u/0/viewer?mid=1tKM4APGj5nDlUaCwwzPYXGFzXfH7SdI",
+};
+
 // Practical "where's the nearest…" list.
 export const essentials: EssentialItem[] = [
   { id: "hospital", label: "Hospital / urgent care", name: "TODO", phone: "TODO" },
