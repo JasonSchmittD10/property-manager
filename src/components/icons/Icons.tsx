@@ -7,6 +7,96 @@ interface IconProps {
   className?: string
 }
 
+// ----------------------------------------------------------------------
+// New floating-pill bottom nav icons (Figma 1:1332).
+// Filled iconoir variants — color swap drives default/selected state.
+// ----------------------------------------------------------------------
+
+export function NavMainIcon({ size = 20, className }: IconProps) {
+  // view-all — 2x2 grid of filled rounded squares.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <rect x="3" y="3" width="6" height="6" rx="1.25" />
+      <rect x="11" y="3" width="6" height="6" rx="1.25" />
+      <rect x="3" y="11" width="6" height="6" rx="1.25" />
+      <rect x="11" y="11" width="6" height="6" rx="1.25" />
+    </svg>
+  )
+}
+
+export function NavPropertyIcon({ size = 20, className }: IconProps) {
+  // house-7-fill — solid house silhouette with door cutout.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M10.78 1.93a1.25 1.25 0 0 0-1.56 0L2.47 7.33a1.25 1.25 0 0 0-.47.98v8.19c0 .55.45 1 1 1h4.5v-5.25c0-.83.67-1.5 1.5-1.5h2c.83 0 1.5.67 1.5 1.5v5.25H17c.55 0 1-.45 1-1V8.31c0-.39-.18-.75-.47-.98z" />
+    </svg>
+  )
+}
+
+export function NavGuideIcon({ size = 20, className }: IconProps) {
+  // location-filled — solid pin with a circular cutout.
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      fillRule="evenodd"
+      clipRule="evenodd"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M10 2c-3.31 0-6 2.66-6 5.94 0 4.5 5.4 9.62 5.63 9.84.21.2.54.2.75 0 .23-.22 5.62-5.34 5.62-9.84C16 4.66 13.31 2 10 2zm0 7.94a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+    </svg>
+  )
+}
+
+export function NavEmergencyIcon({ size = 28, className }: IconProps) {
+  // Alert glyph for the circular emergency button (Figma 6:613).
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M12 3L2 20h20L12 3z"
+        fill="currentColor"
+      />
+      <path
+        d="M12 10v4"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="17" r="1" fill="white" />
+    </svg>
+  )
+}
+
 export function DashboardIcon({ size = 18, className }: IconProps) {
   return (
     <svg

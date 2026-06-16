@@ -1,18 +1,12 @@
 import { useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { BottomTabs } from './BottomTabs'
-import { EmergencyButton } from './EmergencyButton'
 import Home from '../screens/Home'
 import Property from '../screens/Property'
 import Utilities from '../screens/Utilities'
 import Documents from '../screens/Documents'
 import Guide from '../screens/Guide'
 import GuideMap from '../screens/GuideMap'
-
-// Routes where the persistent Emergency button shows. Child routes
-// (e.g. /property/utilities) hide it so the back link is the primary
-// affordance.
-const TOP_LEVEL_ROUTES = new Set(['/', '/property', '/guide'])
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -22,23 +16,12 @@ function ScrollToTop() {
   return null
 }
 
-function TopBar() {
-  const { pathname } = useLocation()
-  if (!TOP_LEVEL_ROUTES.has(pathname)) return null
-  return (
-    <div className="px-4 pt-3 flex justify-end">
-      <EmergencyButton />
-    </div>
-  )
-}
-
 export function AppShell() {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <div className="min-h-screen bg-canvas">
-        <div className="max-w-md mx-auto pb-24">
-          <TopBar />
+        <div className="max-w-md mx-auto pb-[120px]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/property" element={<Property />} />
