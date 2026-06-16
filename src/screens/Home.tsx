@@ -8,7 +8,14 @@ import {
   Wifi,
   Users,
 } from 'lucide-react'
-import { property, rent, quickInfo, maintenance } from '../config/property'
+import {
+  property,
+  rent,
+  quickInfo,
+  maintenance,
+  verses,
+  verseFallback,
+} from '../config/property'
 import { nextDueDateLabel } from '../lib/format'
 
 // Figma 4:392 — Home dashboard. Dynamic eyebrow/greeting, dismissable trash
@@ -42,6 +49,56 @@ function isTrashDayTomorrow(now: Date = new Date()): boolean {
   return tomorrowWeekday === trashWeekday
 }
 
+// Day-of-year (1..366) in local time — used to pick today's verse so the
+// rotation is stable for the day and changes at local midnight.
+function dayOfYear(now: Date = new Date()): number {
+  const start = new Date(now.getFullYear(), 0, 0)
+  return Math.floor((now.getTime() - start.getTime()) / 86_400_000)
+}
+
+function todayReference(): string {
+  if (verses.length === 0) return verseFallback[0]?.reference ?? 'Micah 6:8'
+  return verses[dayOfYear() % verses.length]
+}
+
+function fallbackFor(reference: string): { reference: string; text: string } {
+  return (
+    verseFallback.find((v) => v.reference === reference) ??
+    verseFallback[0] ?? {
+      reference: 'Micah 6:8',
+      text:
+        "He hath showed thee, O man, what is good; and what doth Jehovah require of thee, but to do justly, and to love kindness, and to walk humbly with thy God?",
+    }
+  )
+}
+
+// Pulls today's verse text live from bible-api.com (ASV — keyless, public
+// domain). Initial state is the local ASV fallback, so the card never
+// flashes empty: it shows a real verse immediately, then swaps in the
+// fetched text when it arrives. Any failure (offline, API down, bad
+// shape) silently keeps the fallback. Mirrors useWifiStatus.
+function useVerseOfTheDay() {
+  const ref = todayReference()
+  const [verse, setVerse] = useState(fallbackFor(ref))
+  useEffect(() => {
+    let cancelled = false
+    const url = `https://bible-api.com/${encodeURIComponent(ref)}?translation=asv`
+    fetch(url)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled) return
+        if (data && typeof data.text === 'string' && typeof data.reference === 'string') {
+          setVerse({ reference: data.reference, text: data.text.trim() })
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [ref])
+  return verse
+}
+
 // Reads the /api/wifi-outage edge function on mount. Defaults to "no outage"
 // so a dev (no /api routes) or network failure never shows a scary state.
 function useWifiStatus() {
@@ -70,6 +127,7 @@ export default function Home() {
   const [trashDismissed, setTrashDismissed] = useState(false)
   const showTrash = !trashDismissed && isTrashDayTomorrow()
   const wifi = useWifiStatus()
+  const verse = useVerseOfTheDay()
 
   return (
     <div className="px-6 pt-2 pb-8 space-y-7">
@@ -157,11 +215,10 @@ export default function Home() {
           Verse of the day
         </p>
         <p className="font-heading text-[16px] leading-tight text-ink mt-1">
-          Micah 6:8 ESV
+          {verse.reference} ASV
         </p>
         <p className="font-body font-medium text-[12px] text-warm-700 mt-2 leading-snug">
-          He has told you, O man, what is good; and what does the Lord require of you but
-          to do justice, and to love kindness, and to walk humbly with your God?
+          {verse.text}
         </p>
       </div>
     </div>

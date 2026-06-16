@@ -222,6 +222,27 @@ collections:
               - { name: body, label: "Body", widget: text }
 
   # ----------------------------------------------------------------------
+  # VERSE OF THE DAY — rotation list (references only).
+  # The Home dashboard fetches the ASV text live from bible-api.com and
+  # rotates by day-of-year, so the order here doesn't matter — just the
+  # set. Use canonical references (e.g. "John 3:16", "Philippians 4:6-7").
+  # ----------------------------------------------------------------------
+  - name: verses
+    label: "Verse of the day"
+    files:
+      - name: verses
+        label: "Verse rotation"
+        file: "src/content/verses.json"
+        format: json
+        fields:
+          - name: references
+            label: "References"
+            label_singular: "Reference"
+            widget: list
+            allow_add: true
+            field: { name: reference, label: "Reference", widget: string }
+
+  # ----------------------------------------------------------------------
   # COMMUNITY (Faith & community section on Guide)
   # ----------------------------------------------------------------------
   - name: community

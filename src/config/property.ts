@@ -29,6 +29,7 @@ import seasonalTipsData from "../content/seasonalTips.json";
 import announcementsData from "../content/announcements.json";
 import documentsData from "../content/documents.json";
 import communityData from "../content/community.json";
+import versesData from "../content/verses.json";
 
 // ----------------------------------------------------------------------
 // Types
@@ -247,6 +248,73 @@ export const community: {
 } = communityData;
 export const announcements: Announcement[] = announcementsData.items;
 export const seasonalTips: SeasonalTip[] = seasonalTipsData.items;
+
+// ----------------------------------------------------------------------
+// Verse of the day
+// ----------------------------------------------------------------------
+// `verses` is the CMS-editable rotation list — references only. Today's
+// verse is picked deterministically by day-of-year so it's stable for
+// the day and rotates each midnight. The card fetches the ASV text live
+// from bible-api.com (keyless, public domain). If the fetch fails the
+// card renders from `verseFallback` instead, so it never breaks.
+//
+// ASV (American Standard Version, 1901) is public domain — safe to
+// hard-code and display. Do NOT add ESV / NIV / NLT / NASB text here:
+// those are copyrighted.
+
+export const verses: string[] = versesData.references;
+
+export const verseFallback: { reference: string; text: string }[] = [
+  {
+    reference: "Micah 6:8",
+    text:
+      "He hath showed thee, O man, what is good; and what doth Jehovah require of thee, but to do justly, and to love kindness, and to walk humbly with thy God?",
+  },
+  {
+    reference: "John 3:16",
+    text:
+      "For God so loved the world, that he gave his only begotten Son, that whosoever believeth on him should not perish, but have eternal life.",
+  },
+  {
+    reference: "Psalm 23:1",
+    text: "Jehovah is my shepherd; I shall not want.",
+  },
+  {
+    reference: "Proverbs 3:5-6",
+    text:
+      "Trust in Jehovah with all thy heart, and lean not upon thine own understanding: In all thy ways acknowledge him, and he will direct thy paths.",
+  },
+  {
+    reference: "Joshua 1:9",
+    text:
+      "Have not I commanded thee? Be strong and of good courage; be not affrighted, neither be thou dismayed: for Jehovah thy God is with thee whithersoever thou goest.",
+  },
+  {
+    reference: "Isaiah 41:10",
+    text:
+      "Fear thou not, for I am with thee; be not dismayed, for I am thy God; I will strengthen thee; yea, I will help thee; yea, I will uphold thee with the right hand of my righteousness.",
+  },
+  {
+    reference: "Matthew 11:28",
+    text:
+      "Come unto me, all ye that labor and are heavy laden, and I will give you rest.",
+  },
+  {
+    reference: "Philippians 4:6-7",
+    text:
+      "In nothing be anxious; but in everything by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall guard your hearts and your thoughts in Christ Jesus.",
+  },
+  {
+    reference: "Romans 8:28",
+    text:
+      "And we know that to them that love God all things work together for good, even to them that are called according to his purpose.",
+  },
+  {
+    reference: "Lamentations 3:22-23",
+    text:
+      "It is of Jehovah's lovingkindnesses that we are not consumed, because his compassions fail not. They are new every morning; great is thy faithfulness.",
+  },
+];
 
 // ----------------------------------------------------------------------
 // Custom map — "Our favorite spots" (Guide tab → full-screen page)
