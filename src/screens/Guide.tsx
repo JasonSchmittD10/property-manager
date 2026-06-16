@@ -5,9 +5,11 @@ import {
   community,
   seasonalTips,
   landlord,
+  favoritesMap,
 } from '../config/property'
 import { Card } from '../components/Card'
-import { ExternalLink } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ChevronRight, ExternalLink, Map } from 'lucide-react'
 
 function isResolvedUrl(s: string | undefined): s is string {
   return !!s && /^https?:\/\//.test(s)
@@ -36,6 +38,24 @@ export default function Guide() {
         </div>
         <p className="mt-4 text-muted">{welcomeNote.signoff}</p>
       </Card>
+
+      {/* Our favorite spots — full-screen map */}
+      {favoritesMap.enabled && (
+        <Link
+          to="/guide/map"
+          aria-label={favoritesMap.linkLabel}
+          className="block"
+        >
+          <Card className="flex items-center gap-3">
+            <Map size={20} className="text-sage" />
+            <div className="flex-1">
+              <p className="font-heading text-lg">{favoritesMap.linkLabel}</p>
+              <p className="text-sm text-muted">Explore the map</p>
+            </div>
+            <ChevronRight size={18} className="text-sage" />
+          </Card>
+        </Link>
+      )}
 
       {/* Neighborhood */}
       {populatedCategories.length > 0 && (
