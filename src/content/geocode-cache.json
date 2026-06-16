@@ -1,0 +1,32 @@
+{
+  "cultivate": {
+    "lat": 35.5834233,
+    "lng": -78.7985398,
+    "query": "Cultivate Coffee Roasters, Fuquay-Varina, North Carolina",
+    "resolvedAt": "2026-06-16T18:52:12.044Z"
+  },
+  "bass-lake": {
+    "lat": 35.6384214,
+    "lng": -78.8072011,
+    "query": "Bass Lake Park, Holly Springs, North Carolina",
+    "resolvedAt": "2026-06-16T18:52:13.483Z"
+  },
+  "hilltop": {
+    "lat": 35.6337693,
+    "lng": -78.7348254,
+    "query": "Hilltop Needmore Town Park, Fuquay-Varina, North Carolina",
+    "resolvedAt": "2026-06-16T18:52:14.961Z"
+  },
+  "fv-dog-park": {
+    "lat": 35.5818954,
+    "lng": -78.8060717,
+    "query": "Fuquay-Varina Dog Park, Fuquay-Varina, North Carolina",
+    "resolvedAt": "2026-06-16T18:52:16.395Z"
+  },
+  "aviator": {
+    "lat": 35.5938174,
+    "lng": -78.7913837,
+    "query": "Aviator Brewing, Fuquay-Varina, North Carolina",
+    "resolvedAt": "2026-06-16T18:52:17.903Z"
+  }
+}

@@ -1,6 +1,36 @@
+/* Leaflet base styles. @import must come BEFORE other rules per CSS spec —
+   PostCSS would otherwise silently drop it. The map area itself is sized
+   inline; popup chrome overrides live below. */
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.leaflet-container {
+  font-family: inherit;
+  background: #faf9f6;
+}
+.leaflet-popup-content-wrapper {
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  border-radius: 0;
+}
+.leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+  font: inherit;
+}
+.leaflet-popup-tip {
+  background: #ffffff;
+  box-shadow: none;
+}
+.leaflet-popup-close-button {
+  color: #8e8270 !important;
+  padding: 6px 8px 0 0 !important;
+  font-size: 18px !important;
+}
 
 @layer base {
   html,

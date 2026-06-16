@@ -171,6 +171,9 @@ collections:
                   - { name: town, label: "Town (optional)", widget: string, required: false }
                   - { name: why, label: "Why you love it", widget: text }
                   - { name: link, label: "Link (optional)", widget: string, required: false }
+                  - { name: address, label: "Address (optional — improves the map pin)", widget: string, required: false }
+                  - { name: lat, label: "Latitude (optional — overrides geocoder)", widget: number, required: false, value_type: float, step: 0.000001 }
+                  - { name: lng, label: "Longitude (optional — overrides geocoder)", widget: number, required: false, value_type: float, step: 0.000001 }
 
   # ----------------------------------------------------------------------
   # ESSENTIALS — nearest hospital, pharmacy, etc.

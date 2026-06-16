@@ -1,14 +1,12 @@
 import { Link, Navigate } from 'react-router-dom'
 import { ChevronLeft } from 'lucide-react'
 import { favoritesMap } from '../config/property'
+import { SpotsMap } from '../components/SpotsMap'
 
 export default function GuideMap() {
   if (!favoritesMap.enabled) {
     return <Navigate to="/guide" replace />
   }
-
-  const embedReady =
-    favoritesMap.embedUrl.length > 0 && !favoritesMap.embedUrl.startsWith('TODO')
 
   return (
     <div className="px-6 pt-4 pb-8 space-y-6">
@@ -32,16 +30,7 @@ export default function GuideMap() {
         </p>
       </header>
 
-      {embedReady ? (
-        <div className="overflow-hidden rounded-cardLg border-hair border-warm-100">
-          <iframe
-            title={favoritesMap.heading}
-            src={favoritesMap.embedUrl}
-            loading="lazy"
-            className="block w-full h-[calc(100vh-18rem)] min-h-[420px] border-0"
-          />
-        </div>
-      ) : null}
+      <SpotsMap />
 
       <p className="text-sm">
         <a

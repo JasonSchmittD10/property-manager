@@ -69,6 +69,11 @@ export interface GuideSpot {
   /** The personal one-liner — keep it short and warm. */
   why: string;
   link?: string;
+  /** Optional address to disambiguate during geocoding. */
+  address?: string;
+  /** Manual lat/lng override. If set, skips the geocode cache lookup. */
+  lat?: number;
+  lng?: number;
 }
 
 export interface GuideCategory {
