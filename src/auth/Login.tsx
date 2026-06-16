@@ -20,9 +20,9 @@ export default function Login() {
     <div className="min-h-screen bg-canvas flex flex-col">
       <div className="flex-1 flex flex-col justify-end p-6 pt-16 bg-surface">
         <p className="text-xs tracking-widest text-muted uppercase">Welcome to</p>
-        <h1 className="font-heading text-4xl mt-1">Bashford</h1>
+        <h1 className="font-heading text-4xl mt-1">{property.name}</h1>
         <p className="text-muted mt-2 max-w-sm">
-          {property.address.line1} · {property.address.cityStateZip}
+          {property.address} · {property.cityStateZip}
         </p>
       </div>
       <form

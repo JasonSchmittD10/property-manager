@@ -1,5 +1,5 @@
 import { Sheet } from './Sheet'
-import { property } from '../config/property'
+import { emergency, landlord } from '../config/property'
 import { ContactRow } from './ContactRow'
 
 interface Props {
@@ -8,43 +8,38 @@ interface Props {
 }
 
 export function EmergencySheet({ open, onClose }: Props) {
-  const e = property.emergency
   return (
     <Sheet open={open} onClose={onClose} title="Emergency info">
       <p className="text-ink">
-        For life-threatening emergencies, <strong>call 911 first.</strong>
+        <strong>{emergency.reminder}</strong>
       </p>
       <div className="space-y-4 mt-4">
         <section>
           <h3 className="text-sm uppercase tracking-widest text-muted">Water shut-off</h3>
-          <p className="mt-1">{e.waterShutoffLocation}</p>
-          {e.waterShutoffPhoto && (
-            <img
-              src={e.waterShutoffPhoto}
-              alt="Water shut-off location"
-              className="mt-2 rounded-card border-hair border-border"
-            />
-          )}
+          <p className="mt-1">{emergency.waterShutoff}</p>
         </section>
         <section>
           <h3 className="text-sm uppercase tracking-widest text-muted">Gas leak</h3>
-          <p className="mt-1">{e.gasGuidance}</p>
+          <p className="mt-1">{emergency.gasLeak}</p>
           <ContactRow
-            contact={{ kind: 'phone', value: e.gasEmergencyLine, label: 'Enbridge emergency line' }}
+            contact={{ kind: 'phone', value: '1-877-776-2427' }}
             title="Enbridge emergency line"
           />
         </section>
         <section>
           <h3 className="text-sm uppercase tracking-widest text-muted">Breaker panel</h3>
-          <p className="mt-1">{e.breakerPanelLocation}</p>
+          <p className="mt-1">{emergency.breakerPanel}</p>
         </section>
         <section>
-          <h3 className="text-sm uppercase tracking-widest text-muted">Landlord after-hours</h3>
-          <p className="mt-1">{property.landlord.afterHoursNote}</p>
-          <ContactRow
-            contact={{ kind: 'phone', value: property.landlord.phone, label: property.landlord.names }}
-            title={`Call ${property.landlord.names}`}
-          />
+          <h3 className="text-sm uppercase tracking-widest text-muted">After-hours contact</h3>
+          <p className="mt-1">{emergency.afterHoursContact}</p>
+          {landlord.contacts.map((c) => (
+            <ContactRow
+              key={c.name}
+              contact={{ kind: 'phone', value: c.phone }}
+              title={`Call ${c.name}`}
+            />
+          ))}
         </section>
       </div>
     </Sheet>

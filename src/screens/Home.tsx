@@ -1,44 +1,55 @@
-import { property } from '../config/property'
+import {
+  property,
+  rent,
+  quickInfo,
+  maintenance,
+  landlord,
+  announcements,
+} from '../config/property'
 import { Card } from '../components/Card'
 import { Button } from '../components/Button'
 import { ContactRow } from '../components/ContactRow'
 import { CopyField } from '../components/CopyField'
-import { formatMoney, ordinal, formatDate } from '../lib/format'
+import { formatMoney, formatDate } from '../lib/format'
 import { Wifi, Trash2, Wrench } from 'lucide-react'
 
 export default function Home() {
-  const { rent, wifi, trash, maintenanceContact, landlord, announcements, heroPhoto, address } =
-    property
-  const total = rent.baseAmount + rent.internetAmount
+  const total = rent.baseRent + rent.internetCharge
 
   return (
     <div className="px-4 space-y-4">
       {/* Hero */}
       <div className="rounded-hero overflow-hidden border-hair border-border bg-surface">
-        {heroPhoto ? (
-          <img src={heroPhoto} alt="Bashford" className="w-full h-44 object-cover" />
+        {property.heroPhoto ? (
+          <img
+            src={property.heroPhoto}
+            alt={property.name}
+            className="w-full h-44 object-cover"
+            onError={(e) => {
+              // Hide broken image so the warm sage-tint fallback shows through.
+              ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+            }}
+          />
         ) : (
           <div className="w-full h-44 bg-sage-tint" aria-hidden />
         )}
         <div className="p-5 bg-card">
           <p className="text-xs tracking-widest text-muted uppercase">Welcome to</p>
-          <h1 className="font-heading text-3xl mt-1">Bashford</h1>
+          <h1 className="font-heading text-3xl mt-1">{property.name}</h1>
           <p className="text-muted mt-1">
-            {address.line1} · {address.cityStateZip}
+            {property.address} · {property.cityStateZip}
           </p>
         </div>
       </div>
 
       {/* Rent */}
       <Card>
-        <div className="flex items-baseline justify-between">
-          <div>
-            <p className="text-xs text-muted uppercase tracking-widest">Rent</p>
-            <p className="font-heading text-3xl mt-1">{formatMoney(total)}</p>
-            <p className="text-muted text-sm mt-1">
-              Due the {ordinal(rent.dueDayOfMonth)} · includes {formatMoney(rent.internetAmount)} internet
-            </p>
-          </div>
+        <div>
+          <p className="text-xs text-muted uppercase tracking-widest">Rent</p>
+          <p className="font-heading text-3xl mt-1">{formatMoney(total)}</p>
+          <p className="text-muted text-sm mt-1">
+            Due the {rent.dueDay} · includes {formatMoney(rent.internetCharge)} internet
+          </p>
         </div>
         <Button
           fullWidth
@@ -55,13 +66,14 @@ export default function Home() {
           <Wifi size={16} className="text-sage" />
           <h2 className="font-heading text-lg">Wifi & trash</h2>
         </div>
-        <CopyField label="Network" value={wifi.ssid} />
-        <CopyField label="Password" value={wifi.password} />
+        <CopyField label="Network" value={quickInfo.wifiNetwork} />
+        <CopyField label="Password" value={quickInfo.wifiPassword} />
         <div className="flex items-start gap-2 pt-3 border-t-hair border-border mt-2">
           <Trash2 size={16} className="text-sage mt-1" />
-          <p className="text-sm">
-            Garbage: {trash.garbageDay} · Recycling: {trash.recyclingDay} ({trash.recyclingCadence})
-          </p>
+          <div className="text-sm flex-1">
+            <p>Trash: {quickInfo.trashDay}</p>
+            <p className="text-muted mt-1">{quickInfo.recyclingNote}</p>
+          </div>
         </div>
       </Card>
 
@@ -71,11 +83,12 @@ export default function Home() {
           <Wrench size={16} className="text-sage" />
           <h2 className="font-heading text-lg">Something not working?</h2>
         </div>
-        <p className="text-muted text-sm">Let us know — we will sort it out.</p>
+        <p className="text-muted text-sm">{maintenance.blurb}</p>
         <ContactRow
-          contact={maintenanceContact}
-          title={maintenanceContact.label ?? 'Reach maintenance'}
+          contact={{ kind: 'url', value: maintenance.contactMethod, label: 'Report a problem' }}
+          title="Report a problem"
         />
+        <p className="text-muted text-xs mt-1">{maintenance.emergencyReminder}</p>
       </Card>
 
       {/* Announcements */}
@@ -96,21 +109,26 @@ export default function Home() {
         )}
       </Card>
 
-      {/* Quick contact */}
+      {/* Quick contact — both landlords */}
       <Card>
-        <h2 className="font-heading text-lg">Reach {landlord.names}</h2>
-        <ContactRow
-          contact={{ kind: 'phone', value: landlord.phone, label: 'Call' }}
-          title="Call"
-        />
-        <ContactRow
-          contact={{ kind: 'sms', value: landlord.phone, label: 'Text' }}
-          title="Text"
-        />
-        <ContactRow
-          contact={{ kind: 'email', value: landlord.email, label: landlord.email }}
-          title="Email"
-        />
+        <h2 className="font-heading text-lg">Reach {landlord.name}</h2>
+        {landlord.contacts.map((c) => (
+          <div key={c.name} className="mt-2 first:mt-1">
+            <p className="text-xs text-muted uppercase tracking-widest">{c.name}</p>
+            <ContactRow
+              contact={{ kind: 'phone', value: c.phone, label: 'Call' }}
+              title="Call"
+            />
+            <ContactRow
+              contact={{ kind: 'sms', value: c.phone, label: 'Text' }}
+              title="Text"
+            />
+            <ContactRow
+              contact={{ kind: 'email', value: c.email, label: c.email }}
+              title="Email"
+            />
+          </div>
+        ))}
       </Card>
     </div>
   )
