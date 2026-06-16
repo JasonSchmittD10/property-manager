@@ -1,30 +1,43 @@
 import { NavLink } from 'react-router-dom'
-import { Home as HomeIcon, House, Compass } from 'lucide-react'
+import {
+  DashboardIcon,
+  PropertyIcon,
+  CityGuideIcon,
+} from '../components/icons/NavIcons'
 
 const tabs = [
-  { to: '/', label: 'Home', icon: HomeIcon, end: true },
-  { to: '/property', label: 'Property', icon: House, end: false },
-  { to: '/guide', label: 'Guide', icon: Compass, end: false },
-]
+  { to: '/', label: 'Dashboard', Icon: DashboardIcon, end: true },
+  { to: '/property', label: 'Property', Icon: PropertyIcon, end: false },
+  { to: '/guide', label: 'City Guide', Icon: CityGuideIcon, end: false },
+] as const
 
 export function BottomTabs() {
   return (
     <nav className="fixed bottom-0 inset-x-0 z-40 bg-canvas border-t-hair border-border">
-      <ul className="flex max-w-md mx-auto">
-        {tabs.map(({ to, label, icon: Icon, end }) => (
-          <li key={to} className="flex-1">
+      <ul className="flex justify-around max-w-md mx-auto">
+        {tabs.map(({ to, label, Icon, end }) => (
+          <li key={to}>
             <NavLink
               to={to}
               end={end}
+              aria-label={label}
               className={({ isActive }) =>
                 [
-                  'flex flex-col items-center gap-1 py-2 text-xs',
-                  isActive ? 'text-sage' : 'text-muted',
+                  // 75px per tab, top padding 12px, 4px gap between icon + label
+                  'flex flex-col items-center gap-[4px] w-[75px] pt-[12px] pb-2',
+                  // 1.5px sage top border on selected; transparent placeholder on default
+                  // so the icon doesn't shift vertically when state changes.
+                  'border-t-[1.5px] border-solid',
+                  isActive ? 'text-sage border-sage' : 'text-muted border-transparent',
                 ].join(' ')
               }
             >
-              <Icon size={20} />
-              {label}
+              <Icon size={18} />
+              <span
+                className="font-heading text-[12px] leading-[14px] tracking-[0.36px] text-center whitespace-nowrap"
+              >
+                {label}
+              </span>
             </NavLink>
           </li>
         ))}
