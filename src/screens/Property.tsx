@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { property, rent, quickInfo } from '../config/property'
 import { formatMoney, nextDueDateLabel } from '../lib/format'
 import {
@@ -8,14 +9,10 @@ import {
   HistoryIcon,
   CaratDownIcon,
 } from '../components/icons/Icons'
-import { UtilitiesSheet } from '../components/UtilitiesSheet'
-import { DocumentsSheet } from '../components/DocumentsSheet'
 import { HouseManualSheet } from '../components/HouseManualSheet'
 
-type SheetKey = 'utilities' | 'documents' | 'manual' | null
-
 export default function Property() {
-  const [openSheet, setOpenSheet] = useState<SheetKey>(null)
+  const [manualOpen, setManualOpen] = useState(false)
   const [breakdownOpen, setBreakdownOpen] = useState(false)
   const total = rent.baseRent + rent.internetCharge
 
@@ -50,35 +47,19 @@ export default function Property() {
           Setup & documents
         </p>
         <div className="bg-card border-hair border-warm-200 rounded-cardLg p-4 space-y-4">
-          <SetupRow
-            Icon={PowerIcon}
-            label="Utilities"
-            onClick={() => setOpenSheet('utilities')}
-          />
+          <SetupRow Icon={PowerIcon} label="Utilities" to="/property/utilities" />
           <Divider />
-          <SetupRow
-            Icon={DocumentIcon}
-            label="Documents"
-            onClick={() => setOpenSheet('documents')}
-          />
+          <SetupRow Icon={DocumentIcon} label="Documents" to="/property/documents" />
           <Divider />
           <SetupRow
             Icon={BookBookmarkIcon}
             label="House Manual"
-            onClick={() => setOpenSheet('manual')}
+            onClick={() => setManualOpen(true)}
           />
         </div>
       </section>
 
-      <UtilitiesSheet
-        open={openSheet === 'utilities'}
-        onClose={() => setOpenSheet(null)}
-      />
-      <DocumentsSheet
-        open={openSheet === 'documents'}
-        onClose={() => setOpenSheet(null)}
-      />
-      <HouseManualSheet open={openSheet === 'manual'} onClose={() => setOpenSheet(null)} />
+      <HouseManualSheet open={manualOpen} onClose={() => setManualOpen(false)} />
     </div>
   )
 }
@@ -215,26 +196,30 @@ function RentCard({
 // Setup & Documents row — icon chip + label + right chevron
 // ----------------------------------------------------------------------
 
-function SetupRow({
-  Icon,
-  label,
-  onClick,
-}: {
+type SetupRowProps = {
   Icon: typeof PowerIcon
   label: string
-  onClick: () => void
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="w-full flex items-center gap-2.5 text-left min-h-[44px]"
-    >
+} & ({ to: string; onClick?: never } | { onClick: () => void; to?: never })
+
+function SetupRow(props: SetupRowProps) {
+  const { Icon, label } = props
+  const content = (
+    <>
       <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage shrink-0">
         <Icon size={20} />
       </span>
       <span className="flex-1 font-heading text-[16px] leading-[20px] text-ink">{label}</span>
       <CaratDownIcon size={16} className="-rotate-90 text-warm-500" />
+    </>
+  )
+  const rowClass = 'w-full flex items-center gap-2.5 text-left min-h-[44px]'
+  return props.to ? (
+    <Link to={props.to} className={rowClass}>
+      {content}
+    </Link>
+  ) : (
+    <button type="button" onClick={props.onClick} className={rowClass}>
+      {content}
     </button>
   )
 }
