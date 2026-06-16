@@ -12,9 +12,9 @@
 
 backend:
   name: github
-  repo: OWNER/REPO            # TODO(user): set to the GitHub owner/repo, e.g. JasonSchmittD10/property-manager
+  repo: JasonSchmittD10/property-manager
   branch: main
-  base_url: https://YOUR-WORKER-URL   # TODO(user): the deployed Sveltia OAuth worker URL (no trailing slash)
+  base_url: https://sveltia-cms-auth.jason-bbe.workers.dev
 
 # Default media library — hero photo + house manual photos.
 media_folder: "public/photos"
