@@ -258,7 +258,21 @@ export const utilities: Utility[] = [
 // CMS-editable content (re-exports from src/content/*.json)
 // ----------------------------------------------------------------------
 
-export const documents: DocumentItem[] = documentsData.items;
+// Sveltia's file widget sometimes emits paths without a leading slash
+// (e.g. "documents/Lease.pdf" instead of "/documents/Lease.pdf"), which
+// the browser would resolve relative to the current URL and 404. Coerce
+// every uploaded PDF to a site-absolute path here, so every consumer
+// (Documents list, DocumentView iframe, etc.) gets a working URL.
+function normalizeFilePath(p: string): string {
+  if (!p) return p
+  if (/^https?:\/\//i.test(p)) return p
+  return "/" + p.replace(/^\/+/, "")
+}
+
+export const documents: DocumentItem[] = documentsData.items.map((d) => ({
+  ...d,
+  file: normalizeFilePath(d.file),
+}));
 export const houseManual: ManualEntry[] = houseManualData.items;
 export const welcomeNote: { heading: string; body: string[]; signoff: string } = welcomeData;
 export const guide: GuideCategory[] = guideData.categories;
