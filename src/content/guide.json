@@ -1,63 +1,130 @@
 {
   "categories": [
     {
-      "id": "coffee",
-      "title": "Coffee & cafés",
+      "id": "restaurants",
+      "title": "Restaurants",
       "spots": [
         {
-          "id": "cultivate",
-          "name": "Cultivate Coffee Roasters",
-          "town": "Fuquay-Varina",
-          "why": "TODO: why you love it"
-        }
-      ]
-    },
-    {
-      "id": "outdoors",
-      "title": "Parks, trails & outdoors",
-      "spots": [
-        {
-          "id": "bass-lake",
-          "name": "Bass Lake Park",
-          "town": "Holly Springs",
-          "why": "TODO: why you love it (lakeside trails)"
+          "id": "the-shiny-diner",
+          "name": "The Shiny Diner",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7645445,
+          "lng": -78.7443266
         },
         {
-          "id": "hilltop",
-          "name": "Hilltop Needmore Town Park",
-          "town": "Fuquay-Varina",
-          "why": "TODO: why you love it (trail running, dog walks)"
+          "id": "biryani-maxx-indian-cuisine",
+          "name": "Biryani Maxx Indian Cuisine",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7909468,
+          "lng": -78.7686169
+        },
+        {
+          "id": "brus-public-house",
+          "name": "Bru's Public House",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.8072138,
+          "lng": -78.7303793
         }
       ]
     },
     {
-      "id": "dogs",
-      "title": "Dog-friendly",
+      "id": "things-to-do",
+      "title": "Things to Do",
       "spots": [
         {
-          "id": "fv-dog-park",
-          "name": "Fuquay-Varina Dog Park",
-          "town": "Fuquay-Varina",
-          "why": "TODO: why you love it"
+          "id": "fenton",
+          "name": "Fenton",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7800677,
+          "lng": -78.7572677
+        },
+        {
+          "id": "wakemed-soccer-park",
+          "name": "WakeMed Soccer Park",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7865815,
+          "lng": -78.7550912
+        },
+        {
+          "id": "drive-shack",
+          "name": "Drive Shack",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.8015537,
+          "lng": -78.7393329
+        },
+        {
+          "id": "north-carolina-museum-of-art",
+          "name": "North Carolina Museum of Art",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.8098857,
+          "lng": -78.7025784
         }
       ]
     },
     {
-      "id": "eats",
-      "title": "Eats & drinks",
+      "id": "parks-and-rec",
+      "title": "Parks & Rec",
       "spots": [
         {
-          "id": "aviator",
-          "name": "Aviator Brewing",
-          "town": "Fuquay-Varina",
-          "why": "TODO: why you love it"
+          "id": "company-mill-trailhead",
+          "name": "Company Mill Trailhead",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.8365661,
+          "lng": -78.7599255
+        },
+        {
+          "id": "lake-johnson-park",
+          "name": "Lake Johnson Park",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7623942,
+          "lng": -78.7142649
+        },
+        {
+          "id": "downtown-cary-park",
+          "name": "Downtown Cary Park",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.7837301,
+          "lng": -78.7809437
+        },
+        {
+          "id": "ann-and-jim-goodnight-museum-park",
+          "name": "Ann and Jim Goodnight Museum Park",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.806104,
+          "lng": -78.7057868
+        },
+        {
+          "id": "lake-wheeler-park",
+          "name": "Lake Wheeler Park",
+          "town": "",
+          "why": "",
+          "link": "",
+          "lat": 35.6948523,
+          "lng": -78.6993596
         }
       ]
-    },
-    {
-      "id": "grocery",
-      "title": "Grocery & essentials",
-      "spots": []
     }
   ]
 }
