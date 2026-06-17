@@ -1,39 +1,26 @@
-import { Link } from 'react-router-dom'
-import { ChevronLeft } from 'lucide-react'
 import { ContactRow } from '../components/ContactRow'
+import { BackLink } from '../components/BackLink'
+import { PageHeader } from '../components/PageHeader'
+import { Card } from '../components/Card'
+import { Eyebrow } from '../components/Eyebrow'
 import { utilities } from '../config/property'
 
 export default function Utilities() {
   return (
     <div className="px-6 pt-4 pb-8 space-y-6">
-      <Link
-        to="/property"
-        className="inline-flex items-center gap-1 text-sage text-sm font-medium min-h-[44px]"
-      >
-        <ChevronLeft size={16} />
-        Property
-      </Link>
+      <BackLink to="/property">Property</BackLink>
 
-      <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
-          Setup
-        </p>
-        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">Utilities</h1>
-        <p className="font-body font-medium text-[14px] text-warm-700 mt-2">
-          Set up utilities in your name effective on your lease start date. Internet is
-          provided by the landlord and included in rent.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Setup"
+        title="Utilities"
+        subtitle="Set up utilities in your name effective on your lease start date. Internet is provided by the landlord and included in rent."
+        subtitleSpacing="loose"
+      />
 
       <div className="space-y-4">
         {utilities.map((u) => (
-          <section
-            key={u.id}
-            className="bg-card border-hair border-warm-100 rounded-cardLg p-4"
-          >
-            <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-              {u.category}
-            </p>
+          <Card as="section" key={u.id}>
+            <Eyebrow tone="subdued">{u.category}</Eyebrow>
             <p className="font-heading text-lg text-ink mt-1">{u.name}</p>
             {u.note && <p className="text-sm text-warm-700 mt-2">{u.note}</p>}
             {u.setupBy === 'tenant' && (
@@ -55,7 +42,7 @@ export default function Utilities() {
                 )}
               </div>
             )}
-          </section>
+          </Card>
         ))}
       </div>
     </div>

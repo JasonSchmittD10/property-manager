@@ -1,5 +1,7 @@
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { ChevronLeft, ExternalLink } from 'lucide-react'
+import { Navigate, useParams } from 'react-router-dom'
+import { ExternalLink } from 'lucide-react'
+import { BackLink } from '../components/BackLink'
+import { PageHeader } from '../components/PageHeader'
 import { documents } from '../config/property'
 
 export default function DocumentView() {
@@ -13,22 +15,9 @@ export default function DocumentView() {
 
   return (
     <div className="px-6 pt-4 pb-8 space-y-4">
-      <Link
-        to="/property/documents"
-        className="inline-flex items-center gap-1 text-sage text-sm font-medium min-h-[44px]"
-      >
-        <ChevronLeft size={16} />
-        Documents
-      </Link>
+      <BackLink to="/property/documents">Documents</BackLink>
 
-      <header>
-        <h1 className="font-heading text-[28px] leading-none text-ink">{doc.title}</h1>
-        {doc.description && (
-          <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
-            {doc.description}
-          </p>
-        )}
-      </header>
+      <PageHeader title={doc.title} subtitle={doc.description} size="md" />
 
       <div className="overflow-hidden rounded-cardLg border-hair border-warm-100 bg-card">
         <iframe

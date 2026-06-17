@@ -20,6 +20,14 @@ interface Props {
   title: string
   subtitle?: string
   size?: 'lg' | 'md'
+  /**
+   * Subtitle spacing under the H1:
+   *  - `tight` (default): mt-1, used when the subtitle reads like a
+   *    second line (address, file description).
+   *  - `loose`: mt-2, used when the subtitle is a descriptive sentence
+   *    that wants breathing room from the H1.
+   */
+  subtitleSpacing?: 'tight' | 'loose'
 }
 
 export function PageHeader({
@@ -28,6 +36,7 @@ export function PageHeader({
   title,
   subtitle,
   size = 'lg',
+  subtitleSpacing = 'tight',
 }: Props) {
   return (
     <header>
@@ -42,7 +51,14 @@ export function PageHeader({
         {title}
       </h1>
       {subtitle && (
-        <p className="text-body text-warm-700 mt-1">{subtitle}</p>
+        <p
+          className={[
+            'text-body text-warm-700',
+            subtitleSpacing === 'loose' ? 'mt-2' : 'mt-1',
+          ].join(' ')}
+        >
+          {subtitle}
+        </p>
       )}
     </header>
   )

@@ -1,33 +1,19 @@
-import { Link } from 'react-router-dom'
-import { ChevronLeft, Trash2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
+import { BackLink } from '../components/BackLink'
+import { PageHeader } from '../components/PageHeader'
+import { Card } from '../components/Card'
 import { houseManual, trashRecycling } from '../config/property'
 
 export default function HouseManual() {
   return (
     <div className="px-6 pt-4 pb-8 space-y-6">
-      <Link
-        to="/property"
-        className="inline-flex items-center gap-1 text-sage text-sm font-medium min-h-[44px]"
-      >
-        <ChevronLeft size={16} />
-        Property
-      </Link>
+      <BackLink to="/property">Property</BackLink>
 
-      <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
-          The basics
-        </p>
-        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
-          House manual
-        </h1>
-      </header>
+      <PageHeader eyebrow="The basics" title="House manual" />
 
       <div className="space-y-4">
         {houseManual.map((m) => (
-          <section
-            key={m.id}
-            className="bg-card border-hair border-warm-100 rounded-cardLg p-4"
-          >
+          <Card as="section" key={m.id}>
             <h2 className="font-heading text-lg text-ink">{m.title}</h2>
             {m.photo && (
               <img
@@ -41,10 +27,10 @@ export default function HouseManual() {
                 <p key={i}>{paragraph}</p>
               ))}
             </div>
-          </section>
+          </Card>
         ))}
 
-        <section className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
+        <Card as="section">
           <h2 className="font-heading text-lg text-ink mb-2">Trash & recycling</h2>
           <div className="flex items-start gap-3">
             <Trash2 size={16} className="text-sage mt-1" />
@@ -71,7 +57,7 @@ export default function HouseManual() {
               </a>
             </div>
           </div>
-        </section>
+        </Card>
       </div>
     </div>
   )
