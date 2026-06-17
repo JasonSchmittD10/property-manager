@@ -76,6 +76,27 @@ collections:
           - { name: signoff, label: "Sign-off", widget: string }
 
   # ----------------------------------------------------------------------
+  # QUICK INFO — wifi network/password, front door code, trash day,
+  # recycling note. These are credentials, but the CMS uses GitHub
+  # write access so only the landlords can read/edit them anyway.
+  # The Home trash-day reminder parses the first weekday word out of
+  # trashDay, so "Thursday (weekly)" / "Tuesday" both work.
+  # ----------------------------------------------------------------------
+  - name: quick_info
+    label: "Quick info"
+    files:
+      - name: quick_info
+        label: "Quick info"
+        file: "src/content/quickInfo.json"
+        format: json
+        fields:
+          - { name: wifiNetwork, label: "Wi-Fi network name", widget: string }
+          - { name: wifiPassword, label: "Wi-Fi password", widget: string }
+          - { name: frontDoorCode, label: "Front door code", widget: string }
+          - { name: trashDay, label: "Trash day (e.g. \"Thursday (weekly)\")", widget: string }
+          - { name: recyclingNote, label: "Recycling note", widget: text }
+
+  # ----------------------------------------------------------------------
   # RENT — math + due date + notes. The payment recipient (Zelle email)
   # stays in code so a wrong-handle save can't route tenants' rent to the
   # wrong account.

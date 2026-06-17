@@ -30,6 +30,7 @@ import announcementsData from "../content/announcements.json";
 import documentsData from "../content/documents.json";
 import communityData from "../content/community.json";
 import versesData from "../content/verses.json";
+import quickInfoData from "../content/quickInfo.json";
 
 // ----------------------------------------------------------------------
 // Types
@@ -182,17 +183,22 @@ export const rent = {
 };
 
 // ----------------------------------------------------------------------
-// Quick info (Home dashboard strip) — stays in code (wifi/door codes
-// are credentials and don't belong in the CMS).
+// Quick info (Property page + Home trash-day reminder).
+//
+// CMS-editable via src/content/quickInfo.json — the CMS uses GitHub
+// write access so only Jason & Abby can change these. The Home
+// dashboard's "Tomorrow is Trash Day!" card parses the weekday out of
+// `trashDay` (regex picks the first weekday word), so values like
+// "Thursday (weekly)" or "Tuesday" both work.
 // ----------------------------------------------------------------------
 
-export const quickInfo = {
-  wifiNetwork: "TODO: WiFi network name",
-  wifiPassword: "TODO: WiFi password",
-  frontDoorCode: "TODO: front door code",
-  trashDay: "Thursday (weekly)",
-  recyclingNote: "Recycling is collected every other week — see the Trash & Recycling section.",
-};
+export const quickInfo: {
+  wifiNetwork: string;
+  wifiPassword: string;
+  frontDoorCode: string;
+  trashDay: string;
+  recyclingNote: string;
+} = quickInfoData;
 
 // ----------------------------------------------------------------------
 // Maintenance / report-a-problem
