@@ -5,6 +5,7 @@ import Home from '../screens/Home'
 import Property from '../screens/Property'
 import Utilities from '../screens/Utilities'
 import Documents from '../screens/Documents'
+import DocumentView from '../screens/DocumentView'
 import HouseManual from '../screens/HouseManual'
 import Guide from '../screens/Guide'
 import GuideMap from '../screens/GuideMap'
@@ -28,6 +29,7 @@ export function AppShell() {
             <Route path="/property" element={<Property />} />
             <Route path="/property/utilities" element={<Utilities />} />
             <Route path="/property/documents" element={<Documents />} />
+            <Route path="/property/documents/:id" element={<DocumentView />} />
             <Route path="/property/house-manual" element={<HouseManual />} />
             <Route path="/guide" element={<Guide />} />
             <Route path="/guide/map" element={<GuideMap />} />
