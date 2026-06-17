@@ -80,14 +80,15 @@
     @apply font-body font-bold text-[12px] tracking-eyebrow uppercase;
   }
 
-  /* H1: page title — Cal Sans 36px. */
+  /* H1: page title — Cal Sans 36px. leading-none matches most screens
+     (most titles are single-line at phone widths). */
   .text-h1 {
-    @apply font-heading text-[36px] leading-tight;
+    @apply font-heading text-[36px] leading-none;
   }
 
   /* H1-sm: document-viewer-style smaller H1 — Cal Sans 28px. */
   .text-h1-sm {
-    @apply font-heading text-[28px] leading-tight;
+    @apply font-heading text-[28px] leading-none;
   }
 
   /* H2: section title — Cal Sans 20px. */
