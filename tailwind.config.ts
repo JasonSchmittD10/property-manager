@@ -22,7 +22,7 @@ export default {
           300: '#A6BC90',
           400: '#87A271',
           500: '#688557',  // Accent (anchor)
-          600: '#566E45',  // Accent pressed
+          600: '#4F7040',  // Accent pressed (matches live Figma variable)
           700: '#455838',
           800: '#36452D',
           900: '#283322',
@@ -51,7 +51,7 @@ export default {
         muted: '#8E8270',      // nav text default (Figma design context)
         border: '#E7E2D8',     // = warm-200
         danger: '#A04A3C',
-        'sage-deep': '#566E45',// = sage-600 (Accent pressed)
+        'sage-deep': '#4F7040',// = sage-600 (Accent pressed)
         'sage-tint': '#EDF1E8',// = sage-50  (Tint surface)
         'warm-card': '#FBFAF7',// Quick info inset (near warm-0)
       },

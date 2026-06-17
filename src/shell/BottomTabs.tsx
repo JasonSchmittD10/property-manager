@@ -4,7 +4,7 @@ import {
   NavMainIcon,
   NavPropertyIcon,
   NavGuideIcon,
-  NavEmergencyIcon,
+  WarningSignIcon,
 } from '../components/icons/Icons'
 import { EmergencySheet } from '../components/EmergencySheet'
 
@@ -86,7 +86,7 @@ export function BottomTabs() {
                   'flex items-center justify-center text-danger',
                 ].join(' ')}
               >
-                <NavEmergencyIcon size={28} />
+                <WarningSignIcon size={24} />
               </button>
             )}
           </div>

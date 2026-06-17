@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  Trash2,
-  X,
-  RefreshCcw,
-  MessageSquareWarning,
-  Wifi,
-  Users,
-} from 'lucide-react'
+  TrashFilledIcon,
+  XCloseIcon,
+  SubscriptionIcon,
+  ScreenReaderIcon,
+  WifiArcsIcon,
+} from '../components/icons/Icons'
 import {
   property,
   rent,
@@ -131,95 +130,98 @@ export default function Home() {
 
   return (
     <div className="px-6 pt-12 pb-8 space-y-7">
-      {/* Header */}
+      {/* Header — eyebrow / h1 / subtitle stack tight, line-height does the work. */}
       <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
           {todayEyebrow()}
         </p>
-        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
+        <h1 className="font-heading text-[36px] leading-tight text-ink">
           {greeting()}
         </h1>
-        <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
+        <p className="font-body font-medium text-[14px] text-warm-700">
           It's a beautiful day to be in Raleigh!
         </p>
       </header>
 
-      {/* Trash day reminder */}
-      {showTrash && (
-        <div className="relative bg-card border-hair border-warm-100 rounded-cardLg p-4">
-          <button
-            type="button"
-            onClick={() => setTrashDismissed(true)}
-            aria-label="Dismiss"
-            className="absolute top-3 right-3 text-warm-500 p-1 min-h-[28px] min-w-[28px] flex items-center justify-center"
-          >
-            <X size={18} />
-          </button>
-          <Trash2 size={20} className="text-ink" />
-          <p className="font-heading text-[16px] leading-tight text-ink mt-2">
-            Tomorrow is Trash Day!
-          </p>
-          <p className="font-body font-medium text-[12px] text-warm-700 mt-1">
-            Trash usually comes by 7am, be sure to get those cans out the night before.
-          </p>
-        </div>
-      )}
+      {/* Card column — 16px gap between trash card, chip grid, verse card, hero. */}
+      <div className="space-y-4">
+        {/* Trash day reminder */}
+        {showTrash && (
+          <div className="relative bg-card border-hair border-warm-100 rounded-cardLg p-4">
+            <button
+              type="button"
+              onClick={() => setTrashDismissed(true)}
+              aria-label="Dismiss"
+              className="absolute top-3 right-3 text-warm-600 p-1 min-h-[28px] min-w-[28px] flex items-center justify-center"
+            >
+              <XCloseIcon size={20} />
+            </button>
+            <TrashFilledIcon size={24} className="text-ink" />
+            <p className="font-heading text-[16px] leading-tight text-ink mt-2">
+              Tomorrow is Trash Day!
+            </p>
+            <p className="font-body font-medium text-[12px] text-warm-700 mt-2.5">
+              Trash usually comes by 7am, be sure to get those cans out the night before.
+            </p>
+          </div>
+        )}
 
-      {/* Action chips — 2x2 */}
-      <div className="grid grid-cols-2 gap-2">
-        <ActionChip
-          Icon={RefreshCcw}
-          title="Pay Rent"
-          sub={nextDueDateLabel(rent.dueDayOfMonth)}
-          to="/property"
-        />
-        <ActionChip
-          Icon={MessageSquareWarning}
-          title="Report a Problem"
-          sub="Let us know of any issues!"
-          href={maintenance.contactMethod}
-        />
-        <ActionChip
-          Icon={Wifi}
-          title="Wifi"
-          sub={wifi.message}
-          to="/property"
-        />
-        <ActionChip
-          Icon={Users}
-          title="Nextdoor"
-          sub="Check the community."
-          href="https://nextdoor.com/neighborhood/huntersrun--raleigh--nc/"
-          external
-        />
-      </div>
-
-      {/* Verse of the day */}
-      <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-          Verse of the day
-        </p>
-        <p className="font-heading text-[16px] leading-tight text-ink mt-1">
-          {verse.reference} ASV
-        </p>
-        <p className="font-body font-medium text-[12px] text-warm-700 mt-2 leading-snug">
-          {verse.text}
-        </p>
-      </div>
-
-      {/* Hero photo */}
-      {property.heroPhoto && (
-        <div className="aspect-[4/3] rounded-cardLg overflow-hidden">
-          <img
-            src={property.heroPhoto}
-            alt={property.name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-            }}
+        {/* Action chips — 2x2 */}
+        <div className="grid grid-cols-2 gap-2">
+          <ActionChip
+            Icon={SubscriptionIcon}
+            title="Pay Rent"
+            sub={nextDueDateLabel(rent.dueDayOfMonth)}
+            to="/property"
+          />
+          <ActionChip
+            Icon={ScreenReaderIcon}
+            title="Report a Problem"
+            sub="Let us know of any issues!"
+            href={maintenance.contactMethod}
+          />
+          <ActionChip
+            Icon={WifiArcsIcon}
+            title="Wifi"
+            sub={wifi.message}
+            to="/property"
+          />
+          <ActionChip
+            Icon={WifiArcsIcon}
+            title="Nextdoor"
+            sub="Check on the community."
+            href="https://nextdoor.com/neighborhood/huntersrun--raleigh--nc/"
+            external
           />
         </div>
-      )}
+
+        {/* Verse of the day */}
+        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
+          <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+            Verse of the day
+          </p>
+          <p className="font-heading text-[16px] leading-tight text-ink mt-2">
+            {verse.reference} ASV
+          </p>
+          <p className="font-body font-medium text-[12px] text-warm-700 mt-2.5 leading-snug">
+            {verse.text}
+          </p>
+        </div>
+
+        {/* Hero photo */}
+        {property.heroPhoto && (
+          <div className="aspect-[4/3] rounded-cardLg overflow-hidden">
+            <img
+              src={property.heroPhoto}
+              alt={property.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                ;(e.currentTarget as HTMLImageElement).style.display = 'none'
+              }}
+            />
+          </div>
+        )}
+      </div>
     </div>
   )
 }
@@ -228,8 +230,9 @@ export default function Home() {
 // Action chip — sage-tint icon chip + Cal Sans label + warm-700 sub.
 // ----------------------------------------------------------------------
 
+type IconCmp = (props: { size?: number; className?: string }) => JSX.Element
 type ActionChipProps = {
-  Icon: typeof Wifi
+  Icon: IconCmp
   title: string
   sub: string
 } & (
@@ -239,12 +242,15 @@ type ActionChipProps = {
 
 function ActionChip(props: ActionChipProps) {
   const { Icon, title, sub } = props
+  // Icons sized to match Figma: most chips use 20px; wifi uses 18px because
+  // its viewBox is shorter (the arcs would otherwise overflow the tile).
+  const iconSize = Icon === WifiArcsIcon ? 18 : 20
   const inner = (
     <>
-      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage">
-        <Icon size={18} />
+      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage-600 shrink-0">
+        <Icon size={iconSize} />
       </span>
-      <span className="block font-heading text-[14px] tracking-[0.01em] text-ink mt-3">
+      <span className="block font-heading text-[16px] tracking-[0.01em] text-ink mt-2.5">
         {title}
       </span>
       <span className="block font-body font-medium text-[12px] text-warm-700 mt-1">
@@ -253,7 +259,7 @@ function ActionChip(props: ActionChipProps) {
     </>
   )
   const cls =
-    'bg-card border-hair border-warm-100 rounded-cardLg p-4 flex flex-col items-start min-h-[120px]'
+    'bg-card border-hair border-warm-100 rounded-cardLg p-4 flex flex-col items-start'
 
   if (props.to) {
     return (
