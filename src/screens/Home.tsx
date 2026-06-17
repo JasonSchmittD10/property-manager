@@ -7,6 +7,9 @@ import {
   ScreenReaderIcon,
   WifiArcsIcon,
 } from '../components/icons/Icons'
+import { Card } from '../components/Card'
+import { Eyebrow } from '../components/Eyebrow'
+import { IconChip } from '../components/IconChip'
 import {
   property,
   rent,
@@ -130,24 +133,20 @@ export default function Home() {
 
   return (
     <div className="px-6 pt-12 pb-8 space-y-7">
-      {/* Header — eyebrow / h1 / subtitle stack tight, line-height does the work. */}
+      {/* Header — eyebrow / h1 / subtitle stack tight, line-height does the work.
+          Stays inline (not PageHeader) because the Figma Home layout uses
+          tight mt-0 spacing between the three lines. */}
       <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
-          {todayEyebrow()}
-        </p>
-        <h1 className="font-heading text-[36px] leading-tight text-ink">
-          {greeting()}
-        </h1>
-        <p className="font-body font-medium text-[14px] text-warm-700">
-          It's a beautiful day to be in Raleigh!
-        </p>
+        <Eyebrow>{todayEyebrow()}</Eyebrow>
+        <h1 className="text-h1 text-ink">{greeting()}</h1>
+        <p className="text-body text-warm-700">It's a beautiful day to be in Raleigh!</p>
       </header>
 
       {/* Card column — 16px gap between trash card, chip grid, verse card, hero. */}
       <div className="space-y-4">
         {/* Trash day reminder */}
         {showTrash && (
-          <div className="relative bg-card border-hair border-warm-100 rounded-cardLg p-4">
+          <Card className="relative">
             <button
               type="button"
               onClick={() => setTrashDismissed(true)}
@@ -157,13 +156,11 @@ export default function Home() {
               <XCloseIcon size={20} />
             </button>
             <TrashFilledIcon size={24} className="text-ink" />
-            <p className="font-heading text-[16px] leading-tight text-ink mt-2">
-              Tomorrow is Trash Day!
-            </p>
-            <p className="font-body font-medium text-[12px] text-warm-700 mt-2.5">
+            <p className="text-label text-ink mt-2">Tomorrow is Trash Day!</p>
+            <p className="text-caption text-warm-700 mt-2.5">
               Trash usually comes by 7am, be sure to get those cans out the night before.
             </p>
-          </div>
+          </Card>
         )}
 
         {/* Action chips — 2x2 */}
@@ -196,17 +193,11 @@ export default function Home() {
         </div>
 
         {/* Verse of the day */}
-        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
-          <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-            Verse of the day
-          </p>
-          <p className="font-heading text-[16px] leading-tight text-ink mt-2">
-            {verse.reference} ASV
-          </p>
-          <p className="font-body font-medium text-[12px] text-warm-700 mt-2.5 leading-snug">
-            {verse.text}
-          </p>
-        </div>
+        <Card>
+          <Eyebrow tone="subdued">Verse of the day</Eyebrow>
+          <p className="text-label text-ink mt-2">{verse.reference} ASV</p>
+          <p className="text-caption text-warm-700 mt-2.5 leading-snug">{verse.text}</p>
+        </Card>
 
         {/* Hero photo */}
         {property.heroPhoto && (
@@ -247,15 +238,9 @@ function ActionChip(props: ActionChipProps) {
   const iconSize = Icon === WifiArcsIcon ? 18 : 20
   const inner = (
     <>
-      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage-600 shrink-0">
-        <Icon size={iconSize} />
-      </span>
-      <span className="block font-heading text-[16px] tracking-[0.01em] text-ink mt-2.5">
-        {title}
-      </span>
-      <span className="block font-body font-medium text-[12px] text-warm-700 mt-1">
-        {sub}
-      </span>
+      <IconChip Icon={Icon} size={iconSize} />
+      <span className="block text-label text-ink mt-2.5">{title}</span>
+      <span className="block text-caption text-warm-700 mt-1">{sub}</span>
     </>
   )
   const cls =

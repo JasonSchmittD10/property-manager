@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Check, Copy } from 'lucide-react'
+import { PageHeader } from '../components/PageHeader'
+import { Card } from '../components/Card'
+import { Eyebrow } from '../components/Eyebrow'
+import { ListRow } from '../components/ListRow'
 import { property, rent, quickInfo } from '../config/property'
 import { formatMoney, nextDueDateLabel } from '../lib/format'
 import {
@@ -17,18 +20,11 @@ export default function Property() {
 
   return (
     <div className="px-6 pt-12 pb-8 space-y-7">
-      {/* Header */}
-      <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
-          Your home
-        </p>
-        <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
-          {property.name}
-        </h1>
-        <p className="font-body font-medium text-[14px] text-warm-700 mt-1">
-          {property.address}, {property.cityStateZip}
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Your home"
+        title={property.name}
+        subtitle={`${property.address}, ${property.cityStateZip}`}
+      />
 
       {/* Cards: Quick info + Rent */}
       <section className="space-y-4">
@@ -42,20 +38,14 @@ export default function Property() {
 
       {/* Setup & Documents */}
       <section className="space-y-4">
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-          Setup & documents
-        </p>
-        <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-4">
-          <SetupRow Icon={PowerIcon} label="Utilities" to="/property/utilities" />
+        <Eyebrow tone="subdued">Setup &amp; documents</Eyebrow>
+        <Card className="space-y-4">
+          <ListRow Icon={PowerIcon} label="Utilities" to="/property/utilities" />
           <Divider />
-          <SetupRow Icon={DocumentIcon} label="Documents" to="/property/documents" />
+          <ListRow Icon={DocumentIcon} label="Documents" to="/property/documents" />
           <Divider />
-          <SetupRow
-            Icon={BookBookmarkIcon}
-            label="House Manual"
-            to="/property/house-manual"
-          />
-        </div>
+          <ListRow Icon={BookBookmarkIcon} label="House Manual" to="/property/house-manual" />
+        </Card>
       </section>
     </div>
   )
@@ -67,7 +57,7 @@ export default function Property() {
 
 function QuickInfoCard() {
   return (
-    <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-2.5">
+    <Card className="space-y-2.5">
       <h2 className="font-heading text-[20px] leading-none text-ink">Quick info</h2>
       <InfoTile
         eyebrow="WIFI PASSWORD"
@@ -75,7 +65,7 @@ function QuickInfoCard() {
         sub={`Network · ${quickInfo.wifiNetwork}`}
       />
       <InfoTile eyebrow="FRONT DOOR CODE" value={quickInfo.frontDoorCode} />
-    </div>
+    </Card>
   )
 }
 
@@ -89,15 +79,13 @@ function InfoTile({
   sub?: string
 }) {
   return (
-    <div className="bg-warm-card rounded-cardInner p-3">
-      <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-        {eyebrow}
-      </p>
+    <Card variant="inset">
+      <Eyebrow tone="subdued">{eyebrow}</Eyebrow>
       <p className="font-heading text-[16px] leading-none text-ink mt-1">{value}</p>
       {sub && (
         <p className="font-body font-medium text-[12px] text-warm-700 mt-1">{sub}</p>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -115,15 +103,11 @@ function RentCard({
   onToggleBreakdown: () => void
 }) {
   return (
-    <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4 space-y-4">
+    <Card className="space-y-4">
       <div>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-          Rent
-        </p>
-        <p className="font-heading text-[32px] leading-none text-ink mt-1">
-          {formatMoney(total)}
-        </p>
-        <p className="font-body font-medium text-[12px] text-warm-700 mt-2">
+        <Eyebrow tone="subdued">Rent</Eyebrow>
+        <p className="text-money text-ink mt-1">{formatMoney(total)}</p>
+        <p className="text-caption text-warm-700 mt-2">
           {nextDueDateLabel(rent.dueDayOfMonth)}
         </p>
       </div>
@@ -136,9 +120,7 @@ function RentCard({
         aria-expanded={breakdownOpen}
         className="w-full flex items-center justify-between min-h-[28px] text-left"
       >
-        <span className="font-heading text-[14px] tracking-[0.14px] text-ink">
-          View breakdown
-        </span>
+        <span className="text-button-md text-ink">View breakdown</span>
         <CaratDownIcon
           size={16}
           className={[
@@ -168,7 +150,7 @@ function RentCard({
       )}
 
       <PayWithZelle />
-    </div>
+    </Card>
   )
 }
 
@@ -194,7 +176,8 @@ function PayWithZelle() {
         <button
           type="button"
           onClick={copy}
-          className="flex-1 bg-sage text-white rounded-cardInner px-4 py-3 font-heading text-[18px] tracking-[0.05em] text-center min-h-[47px] flex items-center justify-center gap-2 active:bg-sage-deep active:scale-[0.98] transition"
+          aria-live="polite"
+          className="flex-1 bg-sage text-white rounded-cardInner px-4 py-3 text-button-lg text-center min-h-[47px] flex items-center justify-center gap-2 active:bg-sage-deep active:scale-[0.98] transition"
         >
           {copied ? (
             <>
@@ -217,43 +200,11 @@ function PayWithZelle() {
           <HistoryIcon size={20} />
         </button>
       </div>
-      <p className="font-body font-medium text-[12px] text-warm-700">
+      <p className="text-caption text-warm-700">
         Sends to <span className="text-ink">{rent.paymentRecipient}</span> via Zelle.{' '}
         {rent.paymentInstructions}
       </p>
     </div>
-  )
-}
-
-// ----------------------------------------------------------------------
-// Setup & Documents row — icon chip + label + right chevron
-// ----------------------------------------------------------------------
-
-type SetupRowProps = {
-  Icon: typeof PowerIcon
-  label: string
-} & ({ to: string; onClick?: never } | { onClick: () => void; to?: never })
-
-function SetupRow(props: SetupRowProps) {
-  const { Icon, label } = props
-  const content = (
-    <>
-      <span className="bg-sage-tint rounded-cardInner w-9 h-9 flex items-center justify-center text-sage shrink-0">
-        <Icon size={20} />
-      </span>
-      <span className="flex-1 font-heading text-[16px] leading-[20px] text-ink">{label}</span>
-      <CaratDownIcon size={16} className="-rotate-90 text-warm-500" />
-    </>
-  )
-  const rowClass = 'w-full flex items-center gap-2.5 text-left min-h-[44px]'
-  return props.to ? (
-    <Link to={props.to} className={rowClass}>
-      {content}
-    </Link>
-  ) : (
-    <button type="button" onClick={props.onClick} className={rowClass}>
-      {content}
-    </button>
   )
 }
 
