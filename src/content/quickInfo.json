@@ -1,7 +1,7 @@
 {
-  "wifiNetwork": "TODO: WiFi network name",
-  "wifiPassword": "TODO: WiFi password",
-  "frontDoorCode": "TODO: front door code",
+  "wifiNetwork": "BashfordCrestHomies",
+  "wifiPassword": "JesusLovesYou",
+  "frontDoorCode": "0349",
   "trashDay": "Thursday (weekly)",
   "recyclingNote": "Recycling is collected every other week — see the Trash & Recycling section."
 }
