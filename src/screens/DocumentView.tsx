@@ -22,8 +22,13 @@ export default function DocumentView() {
 
   return (
     <div className="fixed inset-0 z-50 bg-canvas">
+      {/* #view=FitH is an Adobe PDF Open Parameter that tells the browser's
+          PDF viewer to fit the page to the iframe width on first render.
+          Chrome and Edge honor it; Safari falls back to its default
+          fit-to-width on iframes. toolbar=0 / navpanes=0 strip the
+          built-in viewer chrome where supported (Chrome). */}
       <iframe
-        src={doc.file}
+        src={`${doc.file}#view=FitH&toolbar=0&navpanes=0`}
         title={doc.title}
         className="block w-full h-full border-0"
       />
