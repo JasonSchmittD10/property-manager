@@ -3,26 +3,26 @@
     {
       "id": "lease",
       "title": "Lease agreement",
-      "file": "/documents/lease.pdf",
-      "description": "Your signed lease and its terms."
+      "description": "Your signed lease and its terms.",
+      "file": "documents/Bashford_Lease_Agreement.pdf"
     },
     {
       "id": "inspection",
       "title": "Move-in / move-out inspection checklist",
-      "file": "/documents/move-in-inspection-checklist.pdf",
-      "description": "Condition report for move-in and move-out."
+      "description": "Condition report for move-in and move-out.",
+      "file": "/documents/move-in-inspection-checklist.pdf"
     },
     {
       "id": "house-rules",
       "title": "Welcome & house rules",
-      "file": "/documents/welcome-and-house-rules.pdf",
-      "description": "The basics of living at Bashford."
+      "description": "The basics of living at Bashford.",
+      "file": "/documents/welcome-and-house-rules.pdf"
     },
     {
       "id": "utilities-guide",
       "title": "Utilities setup guide",
-      "file": "/documents/utilities-setup-guide.pdf",
-      "description": "Step-by-step for setting up every utility."
+      "description": "Step-by-step for setting up every utility.",
+      "file": "/documents/utilities-setup-guide.pdf"
     }
   ]
 }
