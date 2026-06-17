@@ -1,7 +1,7 @@
-import type { ComponentType, ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { IconChip } from './IconChip'
-import { CaratDownIcon } from './icons/Icons'
+import { CaratDownIcon, type IconComponent } from './icons/Icons'
 
 /**
  * Standard row with leading icon-chip + label (+ optional sub) + trailing
@@ -14,13 +14,8 @@ import { CaratDownIcon } from './icons/Icons'
  *  - `onClick`: button (in-app action like opening a sheet)
  *  - none: static <div> (no interaction)
  */
-interface IconCmpProps {
-  size?: number
-  className?: string
-}
-
 type ListRowProps = {
-  Icon: ComponentType<IconCmpProps>
+  Icon: IconComponent
   label: ReactNode
   /** Trailing element on the right; defaults to a right-pointing chevron. */
   trailing?: ReactNode

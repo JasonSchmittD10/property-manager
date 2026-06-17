@@ -6,6 +6,7 @@ import {
   SubscriptionIcon,
   ScreenReaderIcon,
   WifiArcsIcon,
+  type IconComponent,
 } from '../components/icons/Icons'
 import { Card } from '../components/Card'
 import { Eyebrow } from '../components/Eyebrow'
@@ -221,9 +222,8 @@ export default function Home() {
 // Action chip — sage-tint icon chip + Cal Sans label + warm-700 sub.
 // ----------------------------------------------------------------------
 
-type IconCmp = (props: { size?: number; className?: string }) => JSX.Element
 type ActionChipProps = {
-  Icon: IconCmp
+  Icon: IconComponent
   title: string
   sub: string
 } & (

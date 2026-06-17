@@ -2,10 +2,20 @@
 // Fills and strokes use currentColor so the active/inactive state is driven
 // by the parent's text color (sage when selected, muted otherwise).
 
-interface IconProps {
+import type { ComponentType } from 'react'
+
+/**
+ * Standard props every icon in this file accepts.
+ *  - `size`: pixel size for both width and height (default per-icon).
+ *  - `className`: forwarded to the root <svg>.
+ */
+export interface IconProps {
   size?: number
   className?: string
 }
+
+/** Convenience alias — an icon component shaped like the ones in this file. */
+export type IconComponent = ComponentType<IconProps>
 
 // ----------------------------------------------------------------------
 // Floating-pill bottom nav + circular Emergency icons.

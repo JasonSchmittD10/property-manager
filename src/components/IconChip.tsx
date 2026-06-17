@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react'
+import type { IconComponent } from './icons/Icons'
 
 /**
  * Square sage-tint icon chip — the small 36×36 rounded tile that
@@ -7,17 +7,12 @@ import type { ComponentType } from 'react'
  *
  * Color: sage-600 fill on sage-tint background (Figma 4:392).
  */
-interface IconCmpProps {
-  size?: number
-  className?: string
-}
-
 export function IconChip({
   Icon,
   size = 20,
   className = '',
 }: {
-  Icon: ComponentType<IconCmpProps>
+  Icon: IconComponent
   size?: number
   className?: string
 }) {
