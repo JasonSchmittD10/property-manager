@@ -15,7 +15,7 @@ export default function Utilities() {
       </Link>
 
       <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
           Setup
         </p>
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">Utilities</h1>

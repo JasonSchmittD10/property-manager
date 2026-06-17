@@ -46,12 +46,13 @@ function resolveSpots(): ResolvedSpot[] {
 }
 
 // Sage teardrop pin — divIcon so it renders as styled HTML/SVG, not
-// the default blue marker PNG. Anchored at the tip.
-const SAGE = '#688557'
+// the default blue marker PNG. Anchored at the tip. Color matches
+// tailwind sage-500 (the accent anchor).
+const SAGE_500 = '#688557'
 const pinHtml = `
   <svg width="22" height="28" viewBox="0 0 22 28" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M11 1C5.477 1 1 5.477 1 11c0 6.5 9 16 9.4 16.4a.85.85 0 0 0 1.2 0C12 27 21 17.5 21 11c0-5.523-4.477-10-10-10Z"
-      fill="${SAGE}" stroke="white" stroke-width="1.5"/>
+      fill="${SAGE_500}" stroke="white" stroke-width="1.5"/>
     <circle cx="11" cy="11" r="3.25" fill="white"/>
   </svg>
 `

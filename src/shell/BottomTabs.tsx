@@ -61,7 +61,7 @@ export function BottomTabs() {
                     className={({ isActive }) =>
                       [
                         'flex flex-col items-center gap-[7px]',
-                        isActive ? 'text-[#648652]' : 'text-muted',
+                        isActive ? 'text-sage-600' : 'text-muted',
                       ].join(' ')
                     }
                   >

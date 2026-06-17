@@ -19,7 +19,7 @@ export default function Property() {
     <div className="px-6 pt-12 pb-8 space-y-7">
       {/* Header */}
       <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
           Your home
         </p>
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">

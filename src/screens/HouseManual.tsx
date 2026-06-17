@@ -14,7 +14,7 @@ export default function HouseManual() {
       </Link>
 
       <header>
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-sage-600">
           The basics
         </p>
         <h1 className="font-heading text-[36px] leading-none text-ink mt-1">
