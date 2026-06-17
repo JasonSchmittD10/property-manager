@@ -19,8 +19,9 @@ type ResolvedSpot = GuideSpot & { lat: number; lng: number; category: string }
 
 // Each spot's coords come from (1) explicit lat/lng on the spot in
 // guide.json, or (2) the build-time geocode cache keyed by id. Spots
-// with neither are dropped and logged once.
-function resolveSpots(): ResolvedSpot[] {
+// with neither are dropped and the caller logs them once via the
+// dev-only effect below.
+function resolveSpots(): { resolved: ResolvedSpot[]; missing: string[] } {
   const cache = geocodeCache as Record<string, { lat: number; lng: number }>
   const resolved: ResolvedSpot[] = []
   const missing: string[] = []
@@ -36,13 +37,7 @@ function resolveSpots(): ResolvedSpot[] {
       }
     }
   }
-  if (missing.length > 0) {
-    console.warn(
-      `[SpotsMap] no coordinates for: ${missing.join(', ')}. ` +
-        `Run "npm run geocode" or set lat/lng/address in guide.json.`,
-    )
-  }
-  return resolved
+  return { resolved, missing }
 }
 
 // Sage teardrop pin — divIcon so it renders as styled HTML/SVG, not
@@ -84,7 +79,19 @@ interface SpotsMapProps {
 }
 
 export function SpotsMap({ preview = false }: SpotsMapProps) {
-  const spots = useMemo(resolveSpots, [])
+  const { resolved: spots, missing } = useMemo(resolveSpots, [])
+
+  // Surface missing geocodes in dev once per mount — side effect lives
+  // in useEffect so React strict-mode's double-invoke of useMemo doesn't
+  // double-warn.
+  useEffect(() => {
+    if (missing.length > 0) {
+      console.warn(
+        `[SpotsMap] no coordinates for: ${missing.join(', ')}. ` +
+          `Run "npm run geocode" or set lat/lng/address in guide.json.`,
+      )
+    }
+  }, [missing])
 
   if (spots.length === 0) {
     return (

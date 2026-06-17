@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { PageHeader } from '../components/PageHeader'
 import { Card } from '../components/Card'
@@ -161,11 +161,19 @@ function RentCard({
 
 function PayWithZelle() {
   const [copied, setCopied] = useState(false)
+  // Track the reset timer so we can cancel it if the component unmounts
+  // before it fires — avoids a setState-on-unmounted warning.
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => {
+    if (resetTimer.current) clearTimeout(resetTimer.current)
+  }, [])
+
   async function copy() {
     try {
       await navigator.clipboard.writeText(rent.paymentRecipient)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      if (resetTimer.current) clearTimeout(resetTimer.current)
+      resetTimer.current = setTimeout(() => setCopied(false), 2000)
     } catch {
       /* clipboard not available — leave button idle */
     }
