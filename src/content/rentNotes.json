@@ -3,6 +3,6 @@
   "internetCharge": 70,
   "dueDayOfMonth": 1,
   "dueDay": "1st of each month",
-  "autoPayNote": "If you set up AutoPay in the payment app, it shows here.",
-  "latePolicy": "TODO: late policy text (e.g. rent is due on the 1st; a late fee of $X applies after the 5th)."
+  "autoPayNote": "Please let Jason or Abby know if payments will be an issue and we will work with you.",
+  "latePolicy": "Click the link below to send payment."
 }
