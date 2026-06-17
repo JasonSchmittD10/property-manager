@@ -4,7 +4,7 @@
       "id": "lease",
       "title": "Lease agreement",
       "description": "Your signed lease and its terms.",
-      "file": "documents/Bashford_Lease_Agreement.pdf"
+      "file": "documents/Bashford_Lease_Agreement-1.pdf"
     },
     {
       "id": "inspection",
@@ -16,13 +16,13 @@
       "id": "house-rules",
       "title": "Welcome & house rules",
       "description": "The basics of living at Bashford.",
-      "file": "documents/Welcome_and_House_Rules.pdf"
+      "file": "documents/Welcome_and_House_Rules-1.pdf"
     },
     {
       "id": "utilities-guide",
       "title": "Utilities setup guide",
       "description": "Step-by-step for setting up every utility.",
-      "file": "/documents/utilities-setup-guide.pdf"
+      "file": "documents/Utilities_Setup_Guide.pdf"
     }
   ]
 }
