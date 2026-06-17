@@ -76,16 +76,22 @@ collections:
           - { name: signoff, label: "Sign-off", widget: string }
 
   # ----------------------------------------------------------------------
-  # RENT NOTES — only the free-text bits. Math + payment link stay in code.
+  # RENT — math + due date + notes. The payment recipient (Zelle email)
+  # stays in code so a wrong-handle save can't route tenants' rent to the
+  # wrong account.
   # ----------------------------------------------------------------------
   - name: rent_notes
-    label: "Rent — notes"
+    label: "Rent"
     files:
       - name: rent_notes
-        label: "Rent notes"
+        label: "Rent"
         file: "src/content/rentNotes.json"
         format: json
         fields:
+          - { name: baseRent, label: "Base rent ($/month)", widget: number, value_type: int, min: 0, step: 1 }
+          - { name: internetCharge, label: "Internet charge ($/month, on top of base rent)", widget: number, value_type: int, min: 0, step: 1 }
+          - { name: dueDayOfMonth, label: "Due day of month (1–31)", widget: number, value_type: int, min: 1, max: 31, step: 1 }
+          - { name: dueDay, label: "Due day — display label (e.g. \"1st of each month\")", widget: string }
           - { name: autoPayNote, label: "AutoPay note", widget: text }
           - { name: latePolicy, label: "Late policy", widget: text }
 

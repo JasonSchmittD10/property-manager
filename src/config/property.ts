@@ -151,12 +151,24 @@ export const appAccess = {
 // notes (latePolicy, autoPayNote) are CMS-editable.
 // ----------------------------------------------------------------------
 
+// Rent math + payment routing.
+//
+// CMS-editable (rentNotes.json): baseRent, internetCharge, dueDayOfMonth,
+// dueDay, autoPayNote, latePolicy. The Sveltia number widgets enforce
+// numeric input so a bad save can't ship a non-number.
+//
+// CODE-only (here): paymentMethod, paymentLabel, paymentRecipient,
+// paymentInstructions. These route real money — keeping them out of the
+// CMS prevents a wrong-recipient edit from sending tenants' rent to the
+// wrong place.
 export const rent = {
-  baseRent: 1900,
-  internetCharge: 70, // Google Fiber, added on top of base rent
-  // totalDue is base + internet = 1970; compute in code or set explicitly.
-  dueDayOfMonth: 1, // numeric — used to compute "Due Jul 1 · in 15 days"
-  dueDay: "1st of each month", // human display — kept for the breakdown view
+  // totalDue is base + internet; the UI computes it as
+  // rent.baseRent + rent.internetCharge.
+  baseRent: rentNotesData.baseRent,
+  internetCharge: rentNotesData.internetCharge,
+  dueDayOfMonth: rentNotesData.dueDayOfMonth, // 1-31 — drives "Due Jul 1 · in 15 days"
+  dueDay: rentNotesData.dueDay, // human display for the breakdown row
+
   // Zelle has no deep-link payment URL — the tenant pastes paymentRecipient
   // into their bank's Zelle screen. Recipient can be an email or US phone.
   paymentMethod: "Zelle" as const,
@@ -164,6 +176,7 @@ export const rent = {
   paymentRecipient: "jschmittj1@gmail.com",
   paymentInstructions:
     "Open your bank's app, find Zelle, and send to the address above.",
+
   autoPayNote: rentNotesData.autoPayNote,
   latePolicy: rentNotesData.latePolicy,
 };
