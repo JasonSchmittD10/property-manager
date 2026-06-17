@@ -30,7 +30,7 @@ function todayEyebrow(now: Date = new Date()): string {
 
 function greeting(now: Date = new Date()): string {
   const hour = now.getHours()
-  if (hour < 12) return "Goodmorning, Y'all"
+  if (hour < 12) return "Good morning, Y'all"
   if (hour < 17) return "Good afternoon, Y'all"
   return "Good evening, Y'all"
 }
@@ -194,6 +194,19 @@ export default function Home() {
         />
       </div>
 
+      {/* Verse of the day */}
+      <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
+        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
+          Verse of the day
+        </p>
+        <p className="font-heading text-[16px] leading-tight text-ink mt-1">
+          {verse.reference} ASV
+        </p>
+        <p className="font-body font-medium text-[12px] text-warm-700 mt-2 leading-snug">
+          {verse.text}
+        </p>
+      </div>
+
       {/* Hero photo */}
       {property.heroPhoto && (
         <div className="aspect-[4/3] rounded-cardLg overflow-hidden">
@@ -207,19 +220,6 @@ export default function Home() {
           />
         </div>
       )}
-
-      {/* Verse of the day */}
-      <div className="bg-card border-hair border-warm-100 rounded-cardLg p-4">
-        <p className="font-body font-bold text-[12px] tracking-eyebrow uppercase text-warm-500">
-          Verse of the day
-        </p>
-        <p className="font-heading text-[16px] leading-tight text-ink mt-1">
-          {verse.reference} ASV
-        </p>
-        <p className="font-body font-medium text-[12px] text-warm-700 mt-2 leading-snug">
-          {verse.text}
-        </p>
-      </div>
     </div>
   )
 }
