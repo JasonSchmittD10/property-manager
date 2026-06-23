@@ -1,6 +1,6 @@
 # Bashford Tenant App — Current State
 
-Snapshot of the app as of merge `fd1529f` (PR #8). Use this when you (or a future contributor) need to pick up cold and not re-derive the architecture from the diff history.
+Snapshot of the app after the cleanup pass. Use this when you (or a future contributor) need to pick up cold and not re-derive the architecture from the diff history.
 
 ---
 
@@ -11,7 +11,7 @@ A single-property tenant home base for **5716 Bashford Crest Ln, Raleigh, NC 276
 Hard constraints (locked in by the original brief — don't relitigate without explicit ask):
 - One shared username/password gates the whole app. No per-user accounts, no real auth backend.
 - No payment processing. "Pay Rent" deep-links to Venmo.
-- All editable content lives in **one typed config file**: [`src/config/property.ts`](../src/config/property.ts).
+- All editable content lives in [`src/config/property.ts`](../src/config/property.ts), which re-exports per-section JSON in [`src/content/`](../src/content/) so a non-technical editor (Decap CMS at `/admin/`) can edit content without touching TypeScript.
 - Mobile-first. Designed at ~390px width; scales up gracefully but desktop is not the priority.
 
 ---
@@ -26,20 +26,52 @@ Hard constraints (locked in by the original brief — don't relitigate without e
 | Routing | React Router 6 (`BrowserRouter`) |
 | Icons | Custom SVGs from Figma in [`src/components/icons/Icons.tsx`](../src/components/icons/Icons.tsx) + a few `lucide-react` icons |
 | Fonts | **Self-hosted** via `@fontsource/cal-sans` + `@fontsource/hanken-grotesk` — no CDN dependency |
-| Hosting | Vercel static (auto-deploys on merge to `main`) |
-| State | Local `useState` only. Auth flag lives in React Context. No Zustand/Redux/etc. |
+| Maps | `leaflet` + `react-leaflet` (`SpotsMap` component, OpenStreetMap tiles) |
+| PDFs | `react-pdf` — lazy-loaded so the ~1 MB `pdf.worker` only ships when a tenant opens a PDF |
+| CMS | Decap CMS (formerly Netlify CMS) at `/admin/`, writes per-section JSON in `src/content/` |
+| Edge | One Vercel edge function: [`api/wifi-outage.ts`](../api/wifi-outage.ts) — returns `{ outage, message }` for the Home wifi chip |
+| Hosting | Vercel static + edge (auto-deploys on merge to `main`) |
+| State | Local `useState` only. Auth flag in React Context. No Zustand/Redux/etc. |
 
 ---
 
 ## File structure
 
 ```
+api/
+└── wifi-outage.ts                # edge function: { outage, message, checkedAt, source }
+
+public/
+├── admin/                        # Decap CMS shell (index.html + config.yml)
+├── app-icon.png                  # favicon + iOS apple-touch-icon
+├── documents/                    # PDFs referenced from src/content/documents.json
+└── photos/                       # hero + manual photos
+
+scripts/
+├── geocode-spots.mjs             # geocodes guide.spots → src/content/geocode-cache.json
+└── import-kml.mjs                # imports Jason & Abby's Google My Maps export
+
 src/
 ├── App.tsx                       # AuthProvider → AuthGate → AppShell
 ├── main.tsx                      # mount + font imports + index.css
-├── index.css                     # tailwind base + body/heading defaults + a11y
+├── index.css                     # tailwind base + typography utilities (.text-h1..caption)
+├── vite-env.d.ts                 # ambient module declarations (CSS/SVG imports)
 ├── config/
-│   └── property.ts               # SINGLE source of editable content
+│   └── property.ts               # re-exports per-section JSON from src/content/
+├── content/                      # CMS-managed JSON, one file per section
+│   ├── announcements.json
+│   ├── community.json
+│   ├── documents.json
+│   ├── essentials.json
+│   ├── geocode-cache.json
+│   ├── guide.json
+│   ├── houseManual.json
+│   ├── propertyMedia.json
+│   ├── quickInfo.json
+│   ├── rentNotes.json
+│   ├── seasonalTips.json
+│   ├── verses.json
+│   └── welcome.json
 ├── lib/
 │   └── format.ts                 # formatMoney, formatDate, ordinal, nextDueDateLabel
 ├── auth/
@@ -47,24 +79,29 @@ src/
 │   ├── AuthGate.tsx              # renders Login if not authed
 │   └── Login.tsx                 # branded sign-in screen
 ├── shell/
-│   ├── AppShell.tsx              # router + routes + TopBar + ScrollToTop + BottomTabs
-│   ├── BottomTabs.tsx            # Dashboard/Property/City Guide tab bar
-│   └── EmergencyButton.tsx       # top-right button → EmergencySheet
+│   ├── AppShell.tsx              # router + routes + ScrollToTop + BottomTabs
+│   └── BottomTabs.tsx            # Main/Property/Guide tabs + Emergency button (sheet)
 ├── screens/
-│   ├── Home.tsx                  # dashboard
-│   ├── Property.tsx              # /property (header + Quick info + Rent + 3 setup rows)
+│   ├── Home.tsx                  # /            dashboard (greeting, chips, verse, hero)
+│   ├── Property.tsx              # /property    Quick info + Rent + 3 setup rows
 │   ├── Utilities.tsx             # /property/utilities
-│   ├── Documents.tsx             # /property/documents
-│   └── Guide.tsx                 # /guide
+│   ├── Documents.tsx             # /property/documents          (file list)
+│   ├── DocumentView.tsx          # /property/documents/:id      (lazy-loaded pdf.js viewer)
+│   ├── HouseManual.tsx           # /property/house-manual
+│   ├── Guide.tsx                 # /guide       welcome note + map preview + essentials
+│   └── GuideMap.tsx              # /guide/map   full-screen Leaflet map of pinned spots
 └── components/
-    ├── Button.tsx
-    ├── Card.tsx
-    ├── ContactRow.tsx            # tap-to-call/sms/mail/url with sage chip icon
-    ├── CopyField.tsx             # tap-to-copy (wifi password etc.)
-    ├── Sheet.tsx                 # bottom-sheet modal
-    ├── EmergencySheet.tsx        # cross-cutting emergency info
-    ├── HouseManualSheet.tsx      # opened from Property page
-    └── icons/Icons.tsx           # NavIcons + property page icons (currentColor SVGs)
+    ├── BackLink.tsx              # "← Property" pattern for child pages
+    ├── Card.tsx                  # standard card surface (supports `as` polymorphic prop, `noPadding`)
+    ├── ContactRow.tsx            # tap-to-call/sms/mail/url row with sage chip icon
+    ├── EmergencySheet.tsx        # opened from the Emergency button in BottomTabs
+    ├── Eyebrow.tsx               # uppercase Hanken-Bold label (tones: default sage / subdued warm)
+    ├── IconChip.tsx              # 36px sage-tint chip with a centered icon
+    ├── ListRow.tsx               # icon-chip + title + chevron row used in Property
+    ├── PageHeader.tsx            # eyebrow + h1 + subtitle stack
+    ├── Sheet.tsx                 # bottom-sheet modal (used by EmergencySheet)
+    ├── SpotsMap.tsx              # Leaflet map of guide spots (preview + full modes)
+    └── icons/Icons.tsx           # all custom SVG icons (`currentColor` + `IconComponent` type)
 ```
 
 ---
@@ -73,97 +110,124 @@ src/
 
 | Path | Screen | Notes |
 |---|---|---|
-| `/` | `Home` | Dashboard |
-| `/property` | `Property` | Top-level (Emergency button shown) |
-| `/property/utilities` | `Utilities` | Child page (Emergency hidden, back link to Property) |
-| `/property/documents` | `Documents` | Child page (Emergency hidden, back link to Property) |
-| `/guide` | `Guide` | City guide |
-| `*` | `Home` | 404 fallback |
+| `/` | `Home` | Top-level. Greeting, action chips, verse-of-the-day, hero photo. |
+| `/property` | `Property` | Top-level. Quick info + Rent + 3 setup rows. |
+| `/property/utilities` | `Utilities` | Child page. Back link. |
+| `/property/documents` | `Documents` | Child page. File list — each row routes to viewer. |
+| `/property/documents/:id` | `DocumentView` | Lazy-loaded in-app PDF viewer (pdf.js). |
+| `/property/house-manual` | `HouseManual` | Child page. |
+| `/guide` | `Guide` | Top-level. Welcome note, map preview, essentials. |
+| `/guide/map` | `GuideMap` | Full-screen Leaflet map. |
+| `*` | `Home` | 404 fallback. |
 
-**Top-bar Emergency button** renders only on the three top-level routes (`/`, `/property`, `/guide`) — see `TOP_LEVEL_ROUTES` in [`AppShell.tsx`](../src/shell/AppShell.tsx). Child pages use a "← Property" back link instead.
+**`ScrollToTop`** (in [`AppShell.tsx`](../src/shell/AppShell.tsx)) scrolls to (0, 0) on every `pathname` change.
 
-**`ScrollToTop`** component (also in `AppShell.tsx`) scrolls to (0, 0) on every `pathname` change so navigating to a sub-page doesn't inherit the previous page's scroll.
+**Emergency button** lives inside [`BottomTabs.tsx`](../src/shell/BottomTabs.tsx) (a sage-pill chip + sheet), so it follows the nav and doesn't need per-route plumbing.
 
 ---
 
 ## Design tokens
 
-All defined in [`tailwind.config.ts`](../tailwind.config.ts). Values are the Figma canonical token values from the design file (`tk1qzZqiHTe9tWXDJZyi87`).
+All defined in [`tailwind.config.ts`](../tailwind.config.ts). Values are the Figma canonical tokens (`tk1qzZqiHTe9tWXDJZyi87`).
 
-### Colors
-| Token | Hex | Use |
+### Color ramps
+
+**Sage green (`sage-0..900`)** — primary accent. Anchor 500 = `#688557` (Figma `sage-green/500`).
+
+| Token | Hex | Common role |
 |---|---|---|
-| `canvas` | `#faf9f6` | App background |
-| `card` | `#FFFFFF` | Card backgrounds |
-| `sage` | `#688557` | Primary accent (Figma `sage-green/500`) |
-| `sage-deep` | `#4F6B3F` | Sage pressed/hover |
-| `sage-tint` | `#edf1e8` | Icon chip backgrounds (Figma `sage-green/50`) |
-| `ink` | `#2b2823` | Primary text (Figma `warm-gray/900`) |
-| `muted` | `#8E8270` | Nav inactive labels |
-| `border` | `#E7E0D6` | Legacy hairline border |
-| `warm-50` | `#f7f4ef` | Subtle row divider |
-| `warm-100` | `#efebe2` | Inline hairlines |
-| `warm-200` | `#f1ece4` | Card border |
-| `warm-400` | `#736c5f` | Body M / address copy |
-| `warm-500` | `#a39d90` | Eyebrow secondary text |
-| `warm-card` | `#fbfaf7` | Inset tile inside Quick info |
-| `danger` | `#A04A3C` | **Only** for the genuine Emergency affordance |
+| `sage-50` / `sage-tint` | `#EDF1E8` | Icon chip background, success surface |
+| `sage-500` / `sage` | `#688557` | Primary accent |
+| `sage-600` / `sage-deep` | `#4F7040` | Accent pressed |
 
-### Typography
-- **Headings: Cal Sans 400** (self-hosted). Default weight 500 in CSS via `index.css`.
-- **Body: Hanken Grotesk** 400 + 500 (self-hosted).
-- **Eyebrow:** Hanken Bold 12px, `tracking-eyebrow` (`0.09em`).
-- **Rule:** no weights ≥ 600. `<strong>` is pinned to 500 in `index.css`.
+**Warm gray (`warm-0..900`)** — neutral surfaces and text.
 
-### Shape
-- `rounded-pill` = 11px
-- `rounded-card` = 16px (legacy)
-- `rounded-cardLg` = 18px (new Property page card)
-- `rounded-cardInner` = 12px (inset tiles, buttons)
-- `rounded-hero` = 20px
-- `border-hair` = 0.5px (use exclusively for hairlines)
+| Token | Hex | Common role |
+|---|---|---|
+| `warm-0` / `canvas` / `warm-card` | `#FBFAF6` / `#FBFAF7` | App background, Quick info inset |
+| `warm-50` | `#F7F4EF` | Row divider |
+| `warm-100` | `#EFEBE2` | Hairlines |
+| `warm-200` / `border` | `#E7E2D8` | Card border |
+| `warm-500` | `#A39D90` | Tertiary text (subdued eyebrow) |
+| `warm-700` | `#726C60` | Secondary text (Body M, address line) |
+| `warm-900` / `ink` | `#2B2823` | Primary text |
+
+Other: `muted` `#8E8270` (nav default text), `danger` `#A04A3C` (reserved for genuine emergency affordances only).
+
+### Typography utility classes
+
+Defined in [`src/index.css`](../src/index.css), not in Tailwind config:
+
+| Class | Spec |
+|---|---|
+| `.text-h1` | Cal Sans 36 / leading-none |
+| `.text-h2` | Cal Sans 32 |
+| `.text-label` | Cal Sans 16 |
+| `.text-body` | Hanken Medium 14 |
+| `.text-caption` | Hanken Medium 12 |
+| `.text-money` | Cal Sans display |
+| Eyebrow | rendered via `<Eyebrow>` — `tracking-eyebrow` (`0.09em`) + Hanken Bold 12 uppercase |
+
+### Shape & effects
+
+- `rounded-pill` 11px · `rounded-card` 16px · `rounded-cardLg` 18px · `rounded-cardInner` 12px · `rounded-hero` 20px
+- `border-hair` 0.5px — the only border weight used on hairlines
+- `dropShadow.big` — Figma's "BIG shadow" stack (5 drops), used on the floating bottom nav
 
 ### "Feels wrong" checklist
-If a change introduces any of these, it's drifted: pure-white page bg, drop shadows, gradients, Inter/Roboto/system font in headings, more than one accent color, weights ≥ 600, cramped spacing, hard 1px+ gray borders.
+
+Pure-white page bg · drop shadows on cards · gradients · Inter/Roboto/system font in headings · more than one accent color · weights ≥ 600 (`<strong>` is pinned to 500 in `index.css`) · 1px+ hard gray borders · raw eyebrow markup instead of `<Eyebrow>`.
 
 ---
 
-## Content config — [`src/config/property.ts`](../src/config/property.ts)
+## Content config
 
-Single typed file. Every editable value lives here. Items marked `TODO:` need landlord input.
+Shape lives in [`src/config/property.ts`](../src/config/property.ts); values live as JSON in [`src/content/`](../src/content/). Decap CMS at `/admin/` writes these JSON files; the TS layer adds the types and a couple of derived helpers.
 
-| Export | What it holds |
-|---|---|
-| `property` | name, address, cityStateZip, heroPhoto, leaseStart, leaseEnd |
-| `appAccess` | username, password, display note (auth gate reads these directly) |
-| `rent` | baseRent, internetCharge, dueDayOfMonth (number), dueDay (display string), payment link, autoPayNote, latePolicy |
-| `quickInfo` | wifiNetwork, wifiPassword, frontDoorCode, trashDay, recyclingNote |
-| `maintenance` | mailto link, blurb, emergencyReminder |
-| `utilities` | array — Duke, Enbridge, Raleigh Water, Google Fiber |
-| `documents` | array — lease, inspection, house rules, utilities guide, deposit receipt |
-| `houseManual` | array — thermostat, water shut-off, breaker, disposal, appliances, yard |
-| `welcomeNote` | heading + body paragraphs + signoff |
-| `guide` | array of categories with spots (coffee, outdoors, dogs, eats, grocery) |
-| `essentials` | nearby ER / pharmacy / hardware / gas / vet |
-| `community` | optional Antioch-style faith/community section |
-| `trashRecycling` | collection day, rules, Raleigh schedule lookup link |
-| `announcements` | landlord notices (empty by default) |
-| `seasonalTips` | pollen-season / first-freeze etc. |
-| `emergency` | water shutoff, gas leak guidance, breaker panel, after-hours contact, 911 reminder |
-| `landlord` | name + contacts[] (Jason + Abby) + preferredContact + responseExpectation |
+| Export | Source JSON | What it holds |
+|---|---|---|
+| `property` | static + `propertyMedia.json` | name, address, hero photo, lease term |
+| `appAccess` | static | username, password, display note (auth gate reads directly) |
+| `rent` | static + `rentNotes.json` | base + internet, due day, payment link, autoPay note, late policy |
+| `quickInfo` | `quickInfo.json` | wifi network/password, front door code, trash day, recycling note |
+| `maintenance` | static | mailto link, blurb, emergency reminder |
+| `utilities` | static | Duke, Enbridge, Raleigh Water, Google Fiber |
+| `documents` | `documents.json` | PDFs in `public/documents/` |
+| `houseManual` | `houseManual.json` | thermostat, water shut-off, breaker, disposal, appliances, yard |
+| `welcomeNote` | `welcome.json` | heading + paragraphs + signoff |
+| `guide` | `guide.json` | guide categories + spots |
+| `favoritesMap` | `guide.json` | toggle + bounding box + tile config for `SpotsMap` |
+| `essentials` | `essentials.json` | nearby ER / pharmacy / hardware / gas / vet |
+| `community` | `community.json` | optional Antioch-style faith/community section |
+| `trashRecycling` | static | collection day, rules, schedule lookup link |
+| `announcements` | `announcements.json` | landlord notices (empty by default) |
+| `seasonalTips` | `seasonalTips.json` | pollen-season / first-freeze etc. |
+| `verses` / `verseFallback` | `verses.json` | daily verse pool + offline fallback (ASV) |
+| `emergency` | static | water shutoff, gas leak guidance, breaker, after-hours, 911 reminder |
+| `landlord` | static | name + contacts[] (Jason + Abby) |
+
+`community`, `announcements`, and `seasonalTips` are CMS-managed slots — kept exported even when no screen renders them today, so a future UI can pick them up without a config change.
 
 ---
 
-## Important conventions
+## Conventions
 
-- **No `.env`.** Auth credentials live in `appAccess` in the config file. Deleted `.env.example` and `vite-env.d.ts` after this caused two real bugs (see PR #3).
-- **Sheets vs pages:** sheets for short, self-contained content (House Manual, Emergency). Pages for substantial drilldowns (Utilities, Documents).
-- **Icons:** prefer the custom `Icons.tsx` (Figma-sourced, `currentColor`) over `lucide-react`. Add lucide only when the design doesn't supply an icon.
-- **Money:** always `formatMoney(...)` — never `$` + raw number. The helper handles 0 / cents correctly.
-- **Dates:** `nextDueDateLabel(dayOfMonth)` produces "Due Jul 1 · in 15 days"-style copy from the current date. Uses local time to avoid TZ shifts on mobile.
-- **Routes that should hide the Emergency button:** add the path to `TOP_LEVEL_ROUTES` in `AppShell.tsx` to *show* it; not in the set = hidden.
-- **Strong/bold elements:** never use `font-bold` or `font-semibold`. Use `font-medium` (500). Hanken Bold is reserved for the eyebrow labels at 12px.
-- **No backend.** If a feature seems to need one, push back. The brief is explicit.
+**Building a new screen?** Start with these primitives, in this order:
+
+1. `<BackLink to="/parent">Parent label</BackLink>` — only on child pages
+2. `<PageHeader eyebrow="…" title="…" subtitle="…" />`
+3. `<Card>` (or `<Card as="section">` for semantic sections; `<Card noPadding>` when wrapping a list)
+4. `<Eyebrow tone="subdued">SECTION LABEL</Eyebrow>` for in-card eyebrows
+5. `<ContactRow>` for tap-to-call/sms/mail/url
+
+**Other rules:**
+- No `.env`. Auth credentials live in `appAccess`. (See PR #3 history — this caused two real bugs.)
+- **Sheets vs pages:** sheets for short, self-contained content (Emergency). Pages for substantial drilldowns (Utilities, Documents, House Manual, Document viewer).
+- **Icons:** prefer the custom `Icons.tsx` (Figma-sourced, `currentColor`) over `lucide-react`. Use lucide only when the design doesn't supply an icon (e.g. `ChevronLeft`, `ChevronRight`, `FileText`, `Trash2`, `Users`).
+- **Money:** always `formatMoney(...)` — never `$` + raw number.
+- **Dates:** `nextDueDateLabel(dayOfMonth)` produces "Due Jul 1 · in 15 days" copy from the current date.
+- **No backend.** If a feature seems to need one, push back. The `api/wifi-outage` edge function is the only exception and it's read-only.
+- **Adding a route?** Register in `AppShell.tsx`. If it's a top-level destination, also add it to `BottomTabs.tsx`.
 
 ---
 
@@ -171,45 +235,70 @@ Single typed file. Every editable value lives here. Items marked `TODO:` need la
 
 ```bash
 npm install
-npm run dev        # http://localhost:5173
-npm run build      # tsc -b + vite build → dist/
-npm run typecheck  # tsc --noEmit
+npm run dev         # http://localhost:5173
+npm run build       # tsc -b + vite build → dist/
+npm run typecheck   # tsc --noEmit
+npm run geocode     # populate src/content/geocode-cache.json from guide.spots
+npm run import-kml  # parse Google My Maps KML → guide spots
 ```
 
-Vercel auto-deploys on merge to `main`. No env vars required.
+Vercel auto-deploys on merge to `main`. No env vars required for the app itself; the edge function reads no secrets.
+
+### Bundle sizes (approximate, gzipped)
+
+- `index.*.js` — ~120 KB (React + Router + Leaflet + Tailwind)
+- `index.*.css` — ~16 KB
+- `DocumentView.*.js` — ~137 KB (loaded only when a tenant opens a PDF)
+- `pdf.worker.*.mjs` — ~1 MB raw (lazy, served on demand from `react-pdf`)
+- Fonts — ~25 KB woff2 each (Cal Sans 400, Hanken 400/500)
 
 ---
 
-## Build history (chronological)
+## Build history (chronological highlights)
 
-| PR | Lands as | What it did |
-|---|---|---|
-| #1 | `06def97` | Initial scaffold: Vite/React/TS/Tailwind, content config, auth gate, primitives, app shell, Home/Property/Guide, README. Built per the original brief in `docs/superpowers/plans/2026-06-16-bashford-tenant-app.md`. |
-| #2 | `0e4ca09` | Restructured content config with researched data — multi-export shape (`property`, `appAccess`, `rent`, `quickInfo`, `utilities`, etc.). All screens refactored. |
-| #3 | `8b820d8` | Auth gate reads creds from `appAccess` directly. Dropped `.env`/`.env.example`/`vite-env.d.ts`. Fixed a recurring credentials-out-of-sync bug. |
-| #4 | `59fe9ec` | Self-hosted Cal Sans + Hanken Grotesk via `@fontsource/*`. Fonts no longer fall back on mobile networks that block jsDelivr. |
-| #5 | `bc1d039` | Pixel-perfect bottom navbar from Figma (Dashboard / Property / City Guide). |
-| #6 | `4bb378f` | Pixel-perfect Property page redesign per Figma 1:1359 — header + Quick info + Rent (with breakdown collapse + Pay Rent + history button) + Setup & Documents 3-row section. Added `warm-*` color scale, `tracking-eyebrow`, `rounded-cardLg/cardInner`. |
-| #7 | `5be9fbf` | Utilities and Documents converted from bottom sheets to full pages at `/property/utilities` and `/property/documents`. House Manual still a sheet. |
-| #8 | `fd1529f` | `ScrollToTop` on route change + Emergency button hidden on child pages. |
+| PR | What it did |
+|---|---|
+| #1 | Initial scaffold — Vite/React/TS/Tailwind, content config, auth gate, primitives, app shell, Home/Property/Guide. |
+| #2 | Restructured content config with researched data. |
+| #3 | Auth gate reads creds from `appAccess` directly. Dropped `.env`. |
+| #4 | Self-hosted Cal Sans + Hanken Grotesk. |
+| #5 | Pixel-perfect bottom navbar (Dashboard / Property / City Guide). |
+| #6 | Pixel-perfect Property page redesign (Quick info + Rent + Setup rows). |
+| #7 | Utilities + Documents converted to full pages. |
+| #8 | `ScrollToTop` + Emergency button hidden on child pages. |
+| #9 | First `APP_STATE.md` snapshot. |
+| Later | Guide page redesign with welcome note + map; KML import + geocode script. |
+| Later | `SpotsMap` + `/guide/map` full Leaflet map. |
+| Later | House Manual converted from sheet to full page. |
+| Later | Document viewer — in-app pdf.js renderer with lazy load. |
+| Later | Home dashboard redesign — greeting, trash-day reminder, 2×2 action chips, verse of the day, hero photo. |
+| Later | Verse-of-the-day fetches live ASV text from `bible-api.com` with local fallback. |
+| Later | Decap CMS at `/admin/` writing per-section JSON in `src/content/`. |
+| Later | `/api/wifi-outage` edge function feeding the Home wifi chip. |
+| Later | Cleanup: removed dead `Button.tsx`, 3 duplicate PDFs (~647 KB), fixed Home dup-icon. |
+
+For exact commits, `git log --oneline`.
 
 ---
 
 ## Known TODOs / open threads
 
 - **History button** on the Rent card is decorative — no handler yet. Needs a destination (Venmo history? a payment-log sheet?).
-- **House Manual** is still a sheet. If you want it as a full page for consistency with Utilities/Documents, mirror what those screens do.
-- **Floating-pill nav** with a voice button shows up in Figma 1:1359's bottom but we intentionally kept the tab bar from #5. If you want the pill nav, that's a separate redesign.
-- **`TODO:` markers in `property.ts`** — wifi password, front door code, late policy, lease dates, manual specifics, neighborhood spot reasons. Edit those in place; the structure is ready.
-- **Public PDFs** in `public/documents/` — config has the slots but the files aren't checked in. Documents with empty `file: ""` render as "Coming soon".
+- **`TODO:` markers in `src/content/*.json`** — wifi password, front door code, late policy text, lease dates, etc. Edit via Decap CMS at `/admin/` (preferred) or directly in the JSON.
+- **Public PDFs** in `public/documents/` — config slots present for all; some still reference TODO uploads.
+- **`floor-area` floating-pill nav** with a voice button shows up in some Figma frames but isn't shipped. Decision pending.
 
 ---
 
 ## Where the design lives
 
-Figma: `tk1qzZqiHTe9tWXDJZyi87` — "Property" file. Notable nodes:
-- `1:18` — bottom tab MenuItem (Default / Selected variants for each tab)
-- `1:9` — full nav bar frame
-- `1:1359` — Property page (the source of the current /property design)
+Figma: `tk1qzZqiHTe9tWXDJZyi87` — "Property" file.
+
+Notable nodes referenced during build:
+- `2:308` — color-palette token frame
+- `1:18` / `1:9` — bottom-nav MenuItem + frame
+- `1:1359` — Property page (the current `/property` design)
+- `4:392` — Home dashboard
+- `9:410` — Guide page
 
 Use the Figma MCP `get_design_context` / `get_screenshot` with these node IDs when picking up future work.

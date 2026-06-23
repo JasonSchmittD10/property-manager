@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Users } from 'lucide-react'
 import {
   TrashFilledIcon,
   XCloseIcon,
@@ -54,6 +55,12 @@ function isTrashDayTomorrow(now: Date = new Date()): boolean {
 
 // Day-of-year (1..366) in local time — used to pick today's verse so the
 // rotation is stable for the day and changes at local midnight.
+// Adapter so lucide's <Users /> satisfies our stricter IconComponent contract
+// (size: number, not string | number). Used on the Nextdoor action chip.
+function NeighborhoodIcon({ size = 20, className }: { size?: number; className?: string }) {
+  return <Users size={size} className={className} />
+}
+
 function dayOfYear(now: Date = new Date()): number {
   const start = new Date(now.getFullYear(), 0, 0)
   return Math.floor((now.getTime() - start.getTime()) / 86_400_000)
@@ -185,7 +192,7 @@ export default function Home() {
             to="/property"
           />
           <ActionChip
-            Icon={WifiArcsIcon}
+            Icon={NeighborhoodIcon}
             title="Nextdoor"
             sub="Check on the community."
             href="https://nextdoor.com/neighborhood/huntersrun--raleigh--nc/"
